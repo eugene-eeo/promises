@@ -23,3 +23,11 @@ that will not determine how rightfully
 invoked your function is when faced
 with keyword arguments.
 
+You can also run the test suite for
+the current version of the promises
+library by running the command below:
+
+```bash
+$ python promises/tests.py
+```
+
