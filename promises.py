@@ -1,7 +1,25 @@
 from inspect import currentframe, getargvalues
 from functools import wraps
 
-def require(*items):
+def requires(*items):
+    """
+    Specifies that your function requires some
+    keyword arguments that *must* be included
+    in the function call.:
+
+        >>> @requires("a","b")
+        ... def pythagoreas(a, b):
+        ...     return (a**2 + b**2) ** 0.5
+        ...
+        >>> pythagoreas(1,2)
+        File <stdin> line ?:
+            pythagoreas(1,2)
+        TypeError
+
+    param *items: Any number of names that you
+                  want your wrapped function to
+                  be invoked with.
+    """
     def wrapper(f):
         @wraps(f)
         def inner(*args, **kwargs):
@@ -13,6 +31,19 @@ def require(*items):
     return wrapper
 
 def returns(return_type):
+    """
+    Dictates that your return type is of the
+    given type. This function is not recursive
+    and therefore does not guaratee type
+    safety within nested objects.:
+
+        >>> @returns(int)
+        ... def f(x):
+        ...     return x+1
+        ...
+        >>> f(2)
+        3
+    """
     def wrapper(f):
         @wraps(f)
         def inner(*args, **kwargs):
@@ -24,6 +55,20 @@ def returns(return_type):
     return wrapper
 
 def rejects(*positional, **named):
+    """
+    Allows you to specify the types of objects
+    passed into your function that you want to
+    refuse to accept.:
+
+        >>> @rejects(int)
+        ... def f(x):
+        ...     return x**2.3
+        ...
+        >>> f(3)
+        File <stdin> line ?:
+            f(3)
+        TypeError
+    """
     def wrapper(f):
         argtypes = dict(zip(f.__code__.co_varnames, positional))
         argtypes.update(named)
@@ -45,6 +90,21 @@ def rejects(*positional, **named):
     return wrapper
 
 def accepts(*positional, **named):
+    """
+    Allows you to define what types of
+    objects that your function will
+    choose to handle. You may want to
+    use rejects for easier inclusion::
+
+        >>> @accepts(int) # or @accepts(x=int)
+        ... def f(x):
+        ...     return x
+        ...
+        >>> f(0.5)
+        File <stdin> line ?:
+            f(0.5)
+        TypeError
+    """
     def wrapper(f):
         argtypes = dict(zip(f.__code__.co_varnames, positional))
         argtypes.update(named)
