@@ -1,3 +1,12 @@
+"""
+    promises
+    ~~~~~~~~
+
+    Promises is a tiny library with a declarative
+    API that aims to bring some golang-style type
+    safety to Python.
+"""
+
 from inspect import currentframe, getargvalues
 from functools import wraps
 
@@ -74,8 +83,6 @@ def rejects(*positional, **named):
         argtypes.update(named)
         @wraps(f)
         def inner(*args, **kwargs):
-            frame = currentframe()
-            _,_,_, values = getargvalues(frame)
             for index, item in enumerate(f.__code__.co_varnames):
                 argtype = argtypes.get(item)
                 if isinstance(argtype, type):
@@ -106,15 +113,20 @@ def accepts(*positional, **named):
         TypeError
     """
     def wrapper(f):
+        # map the positional arguments to the
+        # required types, and make it into a
+        # single large dictionary along with
+        # the keyword arguments.
         argtypes = dict(zip(f.__code__.co_varnames, positional))
         argtypes.update(named)
         @wraps(f)
         def inner(*args, **kwargs):
-            frame = currentframe()
-            _,_,_, values = getargvalues(frame)
             for index, item in enumerate(f.__code__.co_varnames):
                 argtype = argtypes.get(item)
                 if isinstance(argtype, type):
+                    # in this case it must be a positional
+                    # argument that was invoked with the
+                    # function.
                     if index < len(args):
                         if not isinstance(args[index], argtype):
                             raise TypeError

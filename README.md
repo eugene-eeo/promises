@@ -95,6 +95,7 @@ the current version of the promises
 library by running the command below:
 
 ```bash
+$ git clone ssh://git@github.com/eugene-eeo/promises
 $ python promises/tests.py
 ```
 
