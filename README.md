@@ -20,13 +20,13 @@ def f(x):
 Promises opens up four very basic
 functions to you, all which effects
 can be chained on one another. They
-are the ``accept``, ``returns``,
+are the ``accepts``, ``returns``,
 ``rejects``, and ``requires``. All
 of them raise TypeError when the
 function wrapped is invoked with the
 wrong arguments.
 
-### ``accept``
+### ``accepts``
 
 Declares that the decorated function
 will accept only arguments (either
@@ -37,7 +37,7 @@ implement a method that will only
 accept strings:
 
 ```python
-@accept(str)
+@accepts(str)
 def method(s):
   return
 ```
@@ -87,6 +87,8 @@ upon function invocation:
 def greet(name="John"):
   return "Hello %s" % (name)
 ```
+
+## Running the tests
 
 You can also run the test suite for
 the current version of the promises
