@@ -1,4 +1,4 @@
-from promises import accepts, rejects, returns, require
+from promises import accepts, rejects, returns, requires
 from unittest import TestCase, main
 
 class PromisesTestCase(TestCase):
@@ -11,7 +11,7 @@ class PromisesTestCase(TestCase):
         self.assertEqual(a.__doc__, "Basic stuff")
 
     def test_require(self):
-        @require("node")
+        @requires("node")
         def f(node):
             return ""
         self.assertRaises(TypeError, f, 10)
