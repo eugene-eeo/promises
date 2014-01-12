@@ -10,6 +10,19 @@
 from inspect import currentframe, getargvalues
 from functools import wraps
 
+def implements(*items):
+    def wrapper(f):
+        @wraps(f)
+        def inner(*args, **kwargs):
+            compl = args + tuple(kwargs.values())
+            for method in items:
+                for object_ in compl:
+                    if not hasattr(object_, method):
+                        raise TypeError
+            return f(*args, **kwargs)
+        return inner
+    return wrapper
+
 def requires(*items):
     """
     Specifies that your function requires some

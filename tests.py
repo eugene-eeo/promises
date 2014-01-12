@@ -1,7 +1,15 @@
-from promises import accepts, rejects, returns, requires
+from promises import *
 from unittest import TestCase, main
 
 class PromisesTestCase(TestCase):
+    def test_implements(self):
+        @implements("copy")
+        def f(x):
+            "Basic stuff"
+            return x.copy()
+        self.assertRaises(TypeError, f, 5)
+        self.assertEqual(f.__doc__, "Basic stuff")
+
     def test_rejects(self):
         @rejects(float)
         def a(x):

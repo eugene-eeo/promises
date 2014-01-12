@@ -21,10 +21,10 @@ Promises opens up four very basic
 functions to you, all which effects
 can be chained on one another. They
 are the ``accepts``, ``returns``,
-``rejects``, and ``requires``. All
-of them raise TypeError when the
-function wrapped is invoked with the
-wrong arguments.
+``rejects``, ``requires``, and even
+``implements``. All of them raise
+TypeError when the function wrapped
+is invoked with the wrong arguments.
 
 ### ``accepts``
 
@@ -86,6 +86,19 @@ upon function invocation:
 @requires("name")
 def greet(name="John"):
   return "Hello %s" % (name)
+```
+
+### ``implements``
+
+This function is inspired by the concept
+of interfaces in the Go language- in which
+you can pass in objects only if they
+implement or have the required methods.
+
+```python
+@implements("copy")
+def copy(x):
+  return x.copy()
 ```
 
 ## Running the tests
