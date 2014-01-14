@@ -15,7 +15,7 @@
 
 __all__ = [
     "implements", "accepts", "rejects",
-    "requires", "rejects"
+    "requires", "returns"
     ]
 from functools import wraps
 
