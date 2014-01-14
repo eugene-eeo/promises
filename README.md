@@ -20,6 +20,16 @@ def f(x):
   return x+1
 ```
 
+## Like it?
+
+You can install the library via pip
+or just clone the github repository
+in order to use it in your project.
+
+```shell
+$ pip install Promises
+```
+
 ## Tiny Documentation
 
 Promises opens up four very basic
