@@ -17,6 +17,8 @@ def f(x):
   return x+1
 ```
 
+## Tiny Documentation
+
 Promises opens up four very basic
 functions to you, all which effects
 can be chained on one another. They
@@ -26,7 +28,7 @@ are the ``accepts``, ``returns``,
 TypeError when the function wrapped
 is invoked with the wrong arguments.
 
-### ``accepts``
+### accepts
 
 Declares that the decorated function
 will accept only arguments (either
@@ -42,7 +44,7 @@ def method(s):
   return
 ```
 
-### ``returns``
+### returns
 
 Declares that your function will
 only return objects of the given
@@ -61,7 +63,7 @@ containing any object you want, just
 make sure the container is of the
 specified type.
 
-### ``rejects``
+### rejects
 
 Logically negative version of the
 ``accepts`` function, that will
@@ -76,7 +78,7 @@ def func(x):
   return x
 ```
 
-### ``requires``
+### requires
 
 Declares that the function requires
 one or more specific keyword arguments
@@ -88,7 +90,7 @@ def greet(name="John"):
   return "Hello %s" % (name)
 ```
 
-### ``implements``
+### implements
 
 This function is inspired by the concept
 of interfaces in the Go language- in which

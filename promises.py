@@ -11,6 +11,16 @@ from inspect import currentframe, getargvalues
 from functools import wraps
 
 def implements(*items):
+    """
+    Declares that all of the objects passed into
+    the function must implement the specified
+    methods. This applies to all of the functions.
+    Usage::
+
+        >>> @implements("copy")
+        ... def copy(x):
+        ...     return x.copy()
+    """
     def wrapper(f):
         @wraps(f)
         def inner(*args, **kwargs):
