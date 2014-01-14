@@ -10,27 +10,23 @@ Promises is a little Python toolkit for
 maintaining some sanity in dynamically
 typed languages. You can easily declare
 the signature of your functions using
-decorators:
+decorators::
 
-```python
-from promises import accepts, returns
+    from promises import accepts, returns
 
-# implement f(x) = x + 1
-@accepts(int)
-@returns(int)
-def f(x):
-  return x+1
-```
+    # implement f(x) = x + 1
+    @accepts(int)
+    @returns(int)
+    def f(x):
+        return x+1
 
 ## Like it?
 
 You can install the library via pip
 or just clone the github repository
-in order to use it in your project.
+in order to use it in your project::
 
-```shell
-$ pip install Promises
-```
+    $ pip install Promises
 
 ## Tiny Documentation
 
@@ -51,26 +47,22 @@ positional or keyword, it doesn't
 matter during declaration) of the
 particular type. For example to
 implement a method that will only
-accept strings:
+accept strings::
 
-```python
-@accepts(str)
-def method(s):
-  return
-```
+    @accepts(str)
+    def method(s):
+        return
 
 ### returns
 
 Declares that your function will
 only return objects of the given
 type. For example to make sure
-the function returns a list:
+the function returns a list::
 
-```python
-@returns(list)
-def addone(s):
-  return [i+1 for i in s]
-```
+    @returns(list)
+    def addone(s):
+        return [i+1 for i in s]
 
 Note that the function will not be
 recursive so you can return containers
@@ -85,47 +77,39 @@ Logically negative version of the
 accept either keyword or positional
 arguments that are not of the type.
 For example to implement a function
-that will reject lists:
+that will reject lists::
 
-```python
-@rejects(list)
-def func(x):
-  return x
-```
+    @rejects(list)
+    def func(x):
+        return x
 
 ### requires
 
 Declares that the function requires
 one or more specific keyword arguments
-upon function invocation:
+upon function invocation::
 
-```python
-@requires("name")
-def greet(name="John"):
-  return "Hello %s" % (name)
-```
+    @requires("name")
+    def greet(name="John"):
+        return "Hello %s" % (name)
 
 ### implements
 
 This function is inspired by the concept
 of interfaces in the Go language- in which
 you can pass in objects only if they
-implement or have the required methods.
+implement or have the required methods.::
 
-```python
-@implements("copy")
-def copy(x):
-  return x.copy()
-```
+    @implements("copy")
+    def copy(x):
+        return x.copy()
 
 ## Running the tests
 
 You can also run the test suite for
 the current version of the promises
-library by running the command below:
+library by running the command below::
 
-```bash
-$ git clone ssh://git@github.com/eugene-eeo/promises
-$ python promises/tests.py
-```
+    $ git clone ssh://git@github.com/eugene-eeo/promises
+    $ python promises/tests.py
 
