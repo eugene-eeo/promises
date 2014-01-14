@@ -1,10 +1,14 @@
 promises
 ========
 
-[![Build
-Status](https://travis-ci.org/eugene-eeo/promises.png?branch=master)](https://travis-ci.org/eugene-eeo/promises)
-[![Version](http://pypip.in/v/Promises/badge.png)](https://pypy.python.org/pypi/Promises/)
-[![Downloads](https://pypip.in/d/Promises/badge.png)](https://pypi.python.org/pypi/Promises/)
+.. image:: https://travis-ci.org/eugene-eeo/promises.png?branch=master
+    :target: https://travis-ci.org/eugene-eeo/promises
+
+.. image:: http://pypip.in/v/Promises/badge.png
+    :target: https://pypy.python.org/pypi/Promises
+
+.. image:: https://pypip.in/d/Promises/badge.png
+    :target: https://pypi.python.org/pypi/Promises/
 
 Promises is a little Python toolkit for
 maintaining some sanity in dynamically
@@ -20,7 +24,9 @@ decorators::
     def f(x):
         return x+1
 
-## Like it?
+--------
+Like it?
+--------
 
 You can install the library via pip
 or just clone the github repository
@@ -28,7 +34,9 @@ in order to use it in your project::
 
     $ pip install Promises
 
-## Tiny Documentation
+------------------
+Tiny Documentation
+------------------
 
 Promises opens up four very basic
 functions to you, all which effects
@@ -39,7 +47,9 @@ are the ``accepts``, ``returns``,
 TypeError when the function wrapped
 is invoked with the wrong arguments.
 
-### accepts
+^^^^^^^
+accepts
+^^^^^^^
 
 Declares that the decorated function
 will accept only arguments (either
@@ -53,7 +63,9 @@ accept strings::
     def method(s):
         return
 
-### returns
+^^^^^^^
+returns
+^^^^^^^
 
 Declares that your function will
 only return objects of the given
@@ -70,7 +82,9 @@ containing any object you want, just
 make sure the container is of the
 specified type.
 
-### rejects
+^^^^^^^
+rejects
+^^^^^^^
 
 Logically negative version of the
 ``accepts`` function, that will
@@ -83,7 +97,9 @@ that will reject lists::
     def func(x):
         return x
 
-### requires
+^^^^^^^^
+requires
+^^^^^^^^
 
 Declares that the function requires
 one or more specific keyword arguments
@@ -93,7 +109,9 @@ upon function invocation::
     def greet(name="John"):
         return "Hello %s" % (name)
 
-### implements
+^^^^^^^^^^
+implements
+^^^^^^^^^^
 
 This function is inspired by the concept
 of interfaces in the Go language- in which
@@ -104,7 +122,9 @@ implement or have the required methods.::
     def copy(x):
         return x.copy()
 
-## Running the tests
+-----------------
+Running the tests
+-----------------
 
 You can also run the test suite for
 the current version of the promises
