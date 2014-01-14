@@ -4,10 +4,18 @@
 
     Promises is a tiny library with a declarative
     API that aims to bring some golang-style type
-    safety to Python.
+    safety to Python. Example usage::
+
+        >>> from promises import accepts, returns
+        >>> @accepts(int)
+        ... @returns(int)
+        ... def f(x):
+        ...     return x+1
+        ...
+        >>> f(5)
+        6
 """
 
-from inspect import currentframe, getargvalues
 from functools import wraps
 
 def implements(*items):
@@ -24,7 +32,7 @@ def implements(*items):
     def wrapper(f):
         @wraps(f)
         def inner(*args, **kwargs):
-            compl = args + tuple(kwargs.values())
+            compl = args.__add__(tuple(kwargs.values()))
             for method in items:
                 for object_ in compl:
                     if not hasattr(object_, method):
@@ -62,7 +70,7 @@ def requires(*items):
         return inner
     return wrapper
 
-def returns(return_type):
+def returns(*return_types):
     """
     Dictates that your return type is of the
     given type. This function is not recursive
@@ -80,7 +88,7 @@ def returns(return_type):
         @wraps(f)
         def inner(*args, **kwargs):
             ret = f(*args, **kwargs)
-            if not isinstance(ret, return_type):
+            if not type(ret) in return_types:
                 raise TypeError
             return ret
         return inner
