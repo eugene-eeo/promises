@@ -122,9 +122,10 @@ def returns(*return_types):
         @wraps(f)
         def inner(*args, **kwargs):
             ret = f(*args, **kwargs)
-            if not type(ret) in return_types:
-                raise TypeError
-            return ret
+            for i in return_types:
+                if isinstance(ret, i):
+                    return ret
+            raise TypeError
         return inner
     return wrapper
 
