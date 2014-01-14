@@ -1,8 +1,8 @@
-[![Build
-Status](https://travis-ci.org/eugene-eeo/promises.png?branch=master)](https://travis-ci.org/eugene-eeo/promises)
-
 promises
 ========
+
+[![Build
+Status](https://travis-ci.org/eugene-eeo/promises.png?branch=master)](https://travis-ci.org/eugene-eeo/promises)
 
 Promises is a little Python toolkit for
 maintaining some sanity in dynamically

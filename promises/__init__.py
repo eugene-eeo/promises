@@ -1,21 +1,22 @@
 """
     promises
     ~~~~~~~~
-
-    Promises is a tiny library with a declarative
-    API that aims to bring some golang-style type
-    safety to Python. Example usage::
+    Promises is a little Python toolkit for maintaining
+    some sanity in dynamically typed languages. You can
+    easily declare the signature of your function using
+    decorators::
 
         >>> from promises import accepts, returns
         >>> @accepts(int)
         ... @returns(int)
         ... def f(x):
-        ...     return x+1
-        ...
-        >>> f(5)
-        6
+        ...     return x
 """
 
+__all__ = [
+    "implements", "accepts", "rejects",
+    "requires", "rejects"
+    ]
 from functools import wraps
 
 def implements(*items):
