@@ -3,6 +3,8 @@ promises
 
 [![Build
 Status](https://travis-ci.org/eugene-eeo/promises.png?branch=master)](https://travis-ci.org/eugene-eeo/promises)
+[![Version](http://pypip.in/v/Promises/badge.png)](https://pypy.python.org/pypi/Promises/)
+[![Downloads](https://pypip.in/d/Promises/badge.png)](https://pypi.python.org/pypi/Promises/)
 
 Promises is a little Python toolkit for
 maintaining some sanity in dynamically
