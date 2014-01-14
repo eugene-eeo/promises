@@ -15,9 +15,40 @@
 
 __all__ = [
     "implements", "accepts", "rejects",
-    "requires", "returns"
+    "requires", "returns", "exposes"
     ]
 from functools import wraps
+
+def exposes(*allowed):
+    """
+    Declares that the function can only be invoked
+    with the given keyword arguments. This can be
+    useful during tests where you may want to
+    predefine some default values. Usage::
+
+        >>> @exposes("x")
+        ... def f(x):
+        ...     return x
+        ...
+        >>> f(u=3)
+        File <stdin> line ?:
+            f(u=3)
+        TypeError
+    """
+    def wrapper(f):
+        if allowed == tuple('*'):
+            @wraps(f)
+            def function(**kwargs):
+                return f(**kwargs)
+            return function
+        @wraps(f)
+        def inner(*args, **kwargs):
+            for key, value in kwargs.items():
+                if key not in allowed:
+                    raise TypeError
+            return f(*args, **kwargs)
+        return inner
+    return wrapper
 
 def implements(*items):
     """
@@ -34,8 +65,8 @@ def implements(*items):
         @wraps(f)
         def inner(*args, **kwargs):
             compl = args.__add__(tuple(kwargs.values()))
-            for method in items:
-                for object_ in compl:
+            for object_ in compl:
+                for method in items:
                     if not hasattr(object_, method):
                         raise TypeError
             return f(*args, **kwargs)
@@ -78,12 +109,14 @@ def returns(*return_types):
     and therefore does not guaratee type
     safety within nested objects.:
 
-        >>> @returns(int)
+        >>> @returns(int,float)
         ... def f(x):
         ...     return x+1
         ...
         >>> f(2)
         3
+        >>> f(3.1)
+        4.1
     """
     def wrapper(f):
         @wraps(f)
@@ -115,10 +148,11 @@ def rejects(*positional, **named):
         argtypes.update(named)
         @wraps(f)
         def inner(*args, **kwargs):
+            length = len(args)
             for index, item in enumerate(f.__code__.co_varnames):
                 argtype = argtypes.get(item)
                 if isinstance(argtype, type):
-                    if index < len(args):
+                    if index < length:
                         if isinstance(args[index], argtype):
                             raise TypeError
                     elif item in kws:
@@ -153,13 +187,14 @@ def accepts(*positional, **named):
         argtypes.update(named)
         @wraps(f)
         def inner(*args, **kwargs):
+            length = len(args)
             for index, item in enumerate(f.__code__.co_varnames):
                 argtype = argtypes.get(item)
                 if isinstance(argtype, type):
                     # in this case it must be a positional
                     # argument that was invoked with the
                     # function.
-                    if index < len(args):
+                    if index < length:
                         if not isinstance(args[index], argtype):
                             raise TypeError
                     elif item in kws:

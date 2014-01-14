@@ -2,6 +2,20 @@ from promises import *
 from unittest import TestCase, main
 
 class PromisesTestCase(TestCase):
+    def test_exposes(self):
+        @returns(int)
+        @exposes("x")
+        def f(x):
+            return x+1
+        self.assertEqual(f(3), 4)
+        self.assertRaises(TypeError, f, u=1)
+
+        @exposes("*")
+        def f(x):
+            return x+1
+        self.assertEqual(f(x=2), 3)
+        self.assertRaises(TypeError, f, 2)
+
     def test_implements(self):
         @implements("copy")
         def f(x):
