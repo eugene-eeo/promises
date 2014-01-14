@@ -1,3 +1,6 @@
+[![Build
+Status](https://travis-ci.org/eugene-eeo/promises.png?branch=master)](https://travis-ci.org/eugene-eeo/promises)
+
 promises
 ========
 
