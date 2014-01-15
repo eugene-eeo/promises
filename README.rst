@@ -43,9 +43,10 @@ functions to you, all which effects
 can be chained on one another. They
 are the ``accepts``, ``returns``,
 ``rejects``, ``requires``, and even
-``implements``. All of them raise
-TypeError when the function wrapped
-is invoked with the wrong arguments.
+``implements`` and ``exposes``. All
+of them raise TypeError when the
+function wrapped is invoked with
+the wrong arguments.
 
 ^^^^^^^
 accepts
@@ -121,6 +122,21 @@ implement or have the required methods.::
     @implements("copy")
     def copy(x):
         return x.copy()
+
+
+^^^^^^^
+exposes
+^^^^^^^
+
+Declares that your function exposes the
+given keyword arguments only. This is
+useful when you want to force your API
+user to explicitly set a previous value
+before another parameter, i.e.::
+
+    @exposes("bits")
+    def make(obj, type_=int, bits=0):
+        # ... 
 
 -----------------
 Running the tests

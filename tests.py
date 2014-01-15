@@ -2,6 +2,13 @@ from promises import *
 from unittest import TestCase, main
 
 class PromisesTestCase(TestCase):
+    def test_disallows(self):
+        @disallows("x")
+        def f(x):
+            return x+1
+        self.assertRaises(TypeError, f, x=1)
+        self.assertEqual(f(1), 2)
+
     def test_exposes(self):
         @returns(int)
         @exposes("x")

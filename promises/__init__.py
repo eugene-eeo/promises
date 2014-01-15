@@ -15,7 +15,8 @@
 
 __all__ = [
     "implements", "accepts", "rejects",
-    "requires", "returns", "exposes"
+    "requires", "returns", "exposes",
+    "disallows"
     ]
 from functools import wraps
 
@@ -25,6 +26,22 @@ MUST_NOT_BE_TYPE = "Argument {0} must not be of type {1}."
 MUST_RETURN_TYPE = "Function must return type[s]: {0}."
 MUST_ACCEPT_TYPE = "Argument {1} must be of type {1}."
 DOESNT_IMPLEMENT = "Object doesn't implement method {0}."
+
+def disallows(*not_allowed):
+    def wrapper(f):
+        if not_allowed == ('*',):
+            @wraps(f)
+            def inner(*args):
+                return f(*args)
+            return inner
+        @wraps(f)
+        def inner(*args, **kwargs):
+            for key, value in kwargs.items():
+                if key in not_allowed:
+                    raise TypeError(ARG_NOT_EXPOSED.format(key))
+            return f(*args, **kwargs)
+        return inner
+    return wrapper
 
 def exposes(*allowed):
     """
