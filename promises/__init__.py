@@ -19,12 +19,12 @@ __all__ = [
     ]
 from functools import wraps
 
-ARG_NOT_EXPOSED  = "Named argument {} is not exposed."
-ARG_IS_REQUIRED  = "The argument {} is required."
-MUST_NOT_BE_TYPE = "Argument {} must not be of type {}."
-MUST_RETURN_TYPE = "Function must return type[s]: {}."
-MUST_ACCEPT_TYPE = "Argument {} must be of type {}."
-DOESNT_IMPLEMENT = "Object doesn't implement method {}."
+ARG_NOT_EXPOSED  = "Named argument {0} is not exposed."
+ARG_IS_REQUIRED  = "The argument {0} is required."
+MUST_NOT_BE_TYPE = "Argument {0} must not be of type {1}."
+MUST_RETURN_TYPE = "Function must return type[s]: {0}."
+MUST_ACCEPT_TYPE = "Argument {1} must be of type {1}."
+DOESNT_IMPLEMENT = "Object doesn't implement method {0}."
 
 def exposes(*allowed):
     """
