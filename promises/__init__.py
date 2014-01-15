@@ -19,6 +19,13 @@ __all__ = [
     ]
 from functools import wraps
 
+ARG_NOT_EXPOSED  = "Named argument {} is not exposed."
+ARG_IS_REQUIRED  = "The argument {} is required."
+MUST_NOT_BE_TYPE = "Argument {} must not be of type {}."
+MUST_RETURN_TYPE = "Function must return type[s]: {}."
+MUST_ACCEPT_TYPE = "Argument {} must be of type {}."
+DOESNT_IMPLEMENT = "Object doesn't implement method {}."
+
 def exposes(*allowed):
     """
     Declares that the function can only be invoked
@@ -36,16 +43,16 @@ def exposes(*allowed):
         TypeError
     """
     def wrapper(f):
-        if allowed == tuple('*'):
+        if allowed == ('*',):
             @wraps(f)
-            def function(**kwargs):
+            def inner(**kwargs):
                 return f(**kwargs)
-            return function
+            return inner
         @wraps(f)
         def inner(*args, **kwargs):
             for key, value in kwargs.items():
                 if key not in allowed:
-                    raise TypeError
+                    raise TypeError(ARG_NOT_EXPOSED.format(key))
             return f(*args, **kwargs)
         return inner
     return wrapper
@@ -68,7 +75,7 @@ def implements(*items):
             for object_ in compl:
                 for method in items:
                     if not hasattr(object_, method):
-                        raise TypeError
+                        raise TypeError(DOESNT_IMPLEMENT.format(method))
             return f(*args, **kwargs)
         return inner
     return wrapper
@@ -97,7 +104,7 @@ def requires(*items):
         def inner(*args, **kwargs):
             for key in items:
                 if key not in kwargs:
-                    raise TypeError
+                    raise TypeError(ARG_IS_REQUIRED.format(key))
             return f(*args, **kwargs)
         return inner
     return wrapper
@@ -125,7 +132,7 @@ def returns(*return_types):
             for i in return_types:
                 if isinstance(ret, i):
                     return ret
-            raise TypeError
+            raise TypeError(MUST_RETURN_TYPE.format(return_types))
         return inner
     return wrapper
 
@@ -155,10 +162,14 @@ def rejects(*positional, **named):
                 if isinstance(argtype, type):
                     if index < length:
                         if isinstance(args[index], argtype):
-                            raise TypeError
+                            raise TypeError(
+                                    MUST_NOT_BE_TYPE.format(item, argtype)
+                                    )
                     elif item in kws:
                         if isinstance(kws[item], argtype):
-                            raise TypeError
+                            raise TypeError(
+                                    MUST_NOT_BE_TYPE.format(item, argtype)
+                                    )
             return f(*args, **kwargs)
         return inner
     return wrapper
@@ -197,10 +208,14 @@ def accepts(*positional, **named):
                     # function.
                     if index < length:
                         if not isinstance(args[index], argtype):
-                            raise TypeError
+                            raise TypeError(
+                                    MUST_ACCEPT_TYPE.format(item, argtype)
+                                    )
                     elif item in kws:
                         if not isinstance(kws[item], argtype):
-                            raise TypeError
+                            raise TypeError(
+                                    MUST_ACCEPT_TYPE.format(item, argtype)
+                                    )
             return f(*args, **kwargs)
         return inner
     return wrapper
