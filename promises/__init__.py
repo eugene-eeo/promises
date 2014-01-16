@@ -28,6 +28,16 @@ MUST_ACCEPT_TYPE = "Argument {1} must be of type {1}."
 DOESNT_IMPLEMENT = "Object doesn't implement method {0}."
 
 def disallows(*not_allowed):
+    """
+    Declares that the wrapped function doesn't
+    allow any keyword arguments of the given
+    name- the logical negation of ``exposes``.
+    Usage example::
+
+        >>> @disallows('bits')
+        ... def f(bits=0):
+        ...     return file.read(bits)
+    """
     def wrapper(f):
         if not_allowed == ('*',):
             @wraps(f)
