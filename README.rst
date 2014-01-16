@@ -138,6 +138,21 @@ before another parameter, i.e.::
     def make(obj, type_=int, bits=0):
         # ... 
 
+
+^^^^^^^^^
+disallows
+^^^^^^^^^
+
+Declares that your decorated function
+does not allow the use of particular
+keyword arguments. This is useful to
+enforce the use of positional arguments
+to emphasize their importance::
+
+    @disallows("*")
+    def pythagoreas(a, b):
+        return (a**2 + b**2) ** 0.5
+
 -----------------
 Running the tests
 -----------------
