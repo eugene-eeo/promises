@@ -37,6 +37,11 @@ def disallows(*not_allowed):
         >>> @disallows('bits')
         ... def f(bits=0):
         ...     return file.read(bits)
+
+    Similar to the exposes function, if the
+    "*" is the only argument passed in, the
+    decorator will return a function that
+    will only take in positional arguments.
     """
     def wrapper(f):
         if not_allowed == ('*',):
@@ -68,6 +73,10 @@ def exposes(*allowed):
         File <stdin> line ?:
             f(u=3)
         TypeError
+
+    If "*" is the only passed in argument, this
+    decorator will return a function that can only
+    be called with keyword arguments.
     """
     def wrapper(f):
         if allowed == ('*',):
@@ -77,7 +86,7 @@ def exposes(*allowed):
             return inner
         @wraps(f)
         def inner(*args, **kwargs):
-            for key, value in kwargs.items():
+            for key, _ in kwargs.items():
                 if key not in allowed:
                     raise TypeError(ARG_NOT_EXPOSED.format(key))
             return f(*args, **kwargs)
