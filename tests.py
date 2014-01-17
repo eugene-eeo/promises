@@ -9,6 +9,12 @@ class PromisesTestCase(TestCase):
         self.assertRaises(TypeError, f, x=1)
         self.assertEqual(f(1), 2)
 
+        @disallows("*")
+        def f(x, u=1):
+            return x+u
+        self.assertRaises(TypeError, f, x=1)
+        self.assertEqual(f(1), 2)
+
     def test_exposes(self):
         @returns(int)
         @exposes("x")
