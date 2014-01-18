@@ -7,6 +7,6 @@ setup(
     author="Eugene Eeo",
     author_email="packwolf58@gmail.com",
     packages=["promises"],
-    long_description=open("README.rst").read()
+    long_description=open("README").read()
         )
 
