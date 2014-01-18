@@ -43,10 +43,12 @@ functions to you, all which effects
 can be chained on one another. They
 are the ``accepts``, ``returns``,
 ``rejects``, ``requires``, and even
-``implements`` and ``exposes``. All
-of them raise TypeError when the
-function wrapped is invoked with
-the wrong arguments.
+``implements``, ``throws``, and
+``exposes``. All of them raise
+TypeError when the function wrapped
+is invoked with the wrong arguments
+with the exception of ``throws``
+which raises a RuntimeError.
 
 ^^^^^^^
 accepts
@@ -152,6 +154,21 @@ to emphasize their importance::
     @disallows("*")
     def pythagoreas(a, b):
         return (a**2 + b**2) ** 0.5
+
+^^^^^^
+throws
+^^^^^^
+
+Signature to declare that your function
+will throw the given exceptions, and if
+it doesn't, the throws function will
+raise a RuntimeError. Usage::
+
+    @throws(ValueError)
+    def div(num, by=1):
+        if by == 0:
+            raise ValueError
+        return num/by
 
 -----------------
 Running the tests
