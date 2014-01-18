@@ -223,14 +223,15 @@ def rejects(*positional, **named):
         TypeError
     """
     def wrapper(f):
-        argtypes = dict(zip(f.__code__.co_varnames, positional))
+        varnames = f.__code__.co_varnames
+        argtypes = dict(zip(varnames, positional))
         argtypes.update(named)
         @wraps(f)
         def inner(*args, **kwargs):
             length = len(args)
-            for index, item in enumerate(f.__code__.co_varnames):
+            for index, item in enumerate(varnames):
                 argtype = argtypes.get(item)
-                if isinstance(argtype, type):
+                if argtype is not None:
                     if index < length:
                         if isinstance(args[index], argtype):
                             raise TypeError(
@@ -266,17 +267,15 @@ def accepts(*positional, **named):
         # required types, and make it into a
         # single large dictionary along with
         # the keyword arguments.
-        argtypes = dict(zip(f.__code__.co_varnames, positional))
+        accepted = f.__code__.co_varnames
+        argtypes = dict(zip(accepted, positional))
         argtypes.update(named)
         @wraps(f)
         def inner(*args, **kwargs):
             length = len(args)
-            for index, item in enumerate(f.__code__.co_varnames):
+            for index, item in enumerate(accepted):
                 argtype = argtypes.get(item)
-                if isinstance(argtype, type):
-                    # in this case it must be a positional
-                    # argument that was invoked with the
-                    # function.
+                if argtype is not None:
                     if index < length:
                         if not isinstance(args[index], argtype):
                             raise TypeError(
