@@ -16,7 +16,7 @@
 __all__ = [
     "implements", "accepts", "rejects",
     "requires", "returns", "exposes",
-    "disallows"
+    "disallows", "throws"
     ]
 from functools import wraps
 
@@ -26,6 +26,41 @@ MUST_NOT_BE_TYPE = "Argument {0} must not be of type {1}."
 MUST_RETURN_TYPE = "Function must return type[s]: {0}."
 MUST_ACCEPT_TYPE = "Argument {1} must be of type {1}."
 DOESNT_IMPLEMENT = "Object doesn't implement method {0}."
+EXCEPTION_TYPE   = "Raised exception must be of type {0}."
+
+def throws(*exceptions):
+    """
+    Declares that the function can only
+    raise the supplied exceptions- any
+    other raised will cause in a RuntimeError.
+    This is only useful but isn't used
+    solely for testing. Usage example::
+
+        >>> @throws(ValueError)
+        ... def f(div):
+        ...     if div == 0:
+        ...         raise ValueError
+        ...     return 5/div
+
+    You may not want to actually use this
+    signature in production since it is
+    actually quite slow (exception handling
+    does come at a price!).
+    """
+    def wrapper(f):
+        @wraps(f)
+        def inner(*args, **kwargs):
+            try:
+                return f(*args, **kwargs)
+            except Exception as err:
+                # apparently we cannot just do ``err in
+                # exceptions`` since the err variables is
+                # an instance
+                if err.__class__ not in exceptions:
+                    raise RuntimeError(EXCEPTION_TYPE.format(exceptions))
+                raise
+        return inner
+    return wrapper
 
 def disallows(*not_allowed):
     """

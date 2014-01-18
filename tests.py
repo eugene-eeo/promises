@@ -2,6 +2,16 @@ from promises import *
 from unittest import TestCase, main
 
 class PromisesTestCase(TestCase):
+    def test_throws(self):
+        @accepts(int)
+        @throws(ValueError)
+        def f(x):
+            if x < 0:
+                raise ValueError
+            raise OSError
+        self.assertRaises(RuntimeError, f, 2)
+        self.assertRaises(ValueError, f, -1)
+
     def test_disallows(self):
         @disallows("x")
         def f(x):
