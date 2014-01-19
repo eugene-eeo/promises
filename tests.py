@@ -53,6 +53,7 @@ class PromisesTestCase(TestCase):
             "Basic stuff"
             return 0
         self.assertRaises(TypeError, a, 4.0)
+        self.assertEqual(a(2), a(x=2))
         self.assertEqual(a.__doc__, "Basic stuff")
 
     def test_require(self):
@@ -73,7 +74,7 @@ class PromisesTestCase(TestCase):
         def f(x):
             return x
         self.assertRaises(TypeError, f, 1.0)
-        self.assertEqual(f(8), 8)
+        self.assertEqual(f(8), f(x=8))
 
 if __name__ == "__main__":
     main()

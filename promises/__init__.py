@@ -237,8 +237,8 @@ def rejects(*positional, **named):
                             raise TypeError(
                                     MUST_NOT_BE_TYPE.format(item, argtype)
                                     )
-                    elif item in kws:
-                        if isinstance(kws[item], argtype):
+                    elif item in kwargs:
+                        if isinstance(kwargs[item], argtype):
                             raise TypeError(
                                     MUST_NOT_BE_TYPE.format(item, argtype)
                                     )
@@ -281,8 +281,8 @@ def accepts(*positional, **named):
                             raise TypeError(
                                     MUST_ACCEPT_TYPE.format(item, argtype)
                                     )
-                    elif item in kws:
-                        if not isinstance(kws[item], argtype):
+                    elif item in kwargs:
+                        if not isinstance(kwargs[item], argtype):
                             raise TypeError(
                                     MUST_ACCEPT_TYPE.format(item, argtype)
                                     )
