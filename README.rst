@@ -161,7 +161,7 @@ throws
 
 Signature to declare that your function
 will throw the given exceptions, and if
-it doesn't, the throws function will
+it doesn't, the ``throws`` function will
 raise a RuntimeError. Usage::
 
     @throws(ValueError)
