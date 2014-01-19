@@ -56,7 +56,7 @@ def throws(*exceptions):
                 # apparently we cannot just do ``err in
                 # exceptions`` since the err variables is
                 # an instance
-                if err.__class__ not in exceptions:
+                if not isinstance(err, exceptions):
                     raise RuntimeError(EXCEPTION_TYPE.format(exceptions))
                 raise
         return inner
@@ -200,9 +200,8 @@ def returns(*return_types):
         @wraps(f)
         def inner(*args, **kwargs):
             ret = f(*args, **kwargs)
-            for i in return_types:
-                if isinstance(ret, i):
-                    return ret
+            if isinstance(ret, return_types):
+                return ret
             raise TypeError(MUST_RETURN_TYPE.format(return_types))
         return inner
     return wrapper
