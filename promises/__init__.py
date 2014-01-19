@@ -46,6 +46,11 @@ def throws(*exceptions):
     signature in production since it is
     actually quite slow (exception handling
     does come at a price!).
+
+    :param exceptions: Positional arguments
+        containing the accepted or expected
+        exceptions that the function will
+        raise.
     """
     def wrapper(f):
         @wraps(f)
@@ -77,6 +82,11 @@ def disallows(*not_allowed):
     "*" is the only argument passed in, the
     decorator will return a function that
     will only take in positional arguments.
+
+    :param not_allowed: The positional args
+        containing the keyword arguments the
+        decorated function is not allowed to
+        be called with.
     """
     def wrapper(f):
         if not_allowed == ('*',):
@@ -112,6 +122,10 @@ def exposes(*allowed):
     If "*" is the only passed in argument, this
     decorator will return a function that can only
     be called with keyword arguments.
+
+    :param exposes: Exposes the passed in
+        names to expose, and is a positional
+        argument (defined using the '*' star).
     """
     def wrapper(f):
         if allowed == ('*',):
@@ -138,6 +152,9 @@ def implements(*items):
         >>> @implements("copy")
         ... def copy(x):
         ...     return x.copy()
+
+    :param items: The methods or attributes that
+        all of the passed in objects must have.
     """
     def wrapper(f):
         @wraps(f)
@@ -166,7 +183,7 @@ def requires(*items):
             pythagoreas(1,2)
         TypeError
 
-    param *items: Any number of names that you
+    :param items: Any number of names that you
                   want your wrapped function to
                   be invoked with.
     """
@@ -195,6 +212,10 @@ def returns(*return_types):
         3
         >>> f(3.1)
         4.1
+
+    :param return_types: Positional arguments
+        containing the accepted return types
+        of the decorated function.
     """
     def wrapper(f):
         @wraps(f)
@@ -220,6 +241,14 @@ def rejects(*positional, **named):
         File <stdin> line ?:
             f(3)
         TypeError
+
+    :param positional: Positional arguments to
+        keep track of. You can write the given
+        signature using purely positional args
+        because they map to their keyword arg
+        equivalents.
+    :param named: Keyword arguments to keep
+        track of.
     """
     def wrapper(f):
         varnames = f.__code__.co_varnames
@@ -260,6 +289,10 @@ def accepts(*positional, **named):
         File <stdin> line ?:
             f(0.5)
         TypeError
+
+    This function is invoked with the
+    same arguments as the ``rejects``
+    function.
     """
     def wrapper(f):
         # map the positional arguments to the
