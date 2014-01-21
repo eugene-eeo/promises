@@ -3,7 +3,6 @@ from unittest import TestCase, main
 
 class PromisesTestCase(TestCase):
     def test_throws(self):
-        @accepts(int)
         @throws(ValueError)
         def f(x):
             if x < 0:
