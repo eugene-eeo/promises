@@ -14,7 +14,7 @@ class PromisesTestCase(TestCase):
             return x.index(0)
 
         self.assertRaises(TypeError, f, 1)
-        self.assertEquals(f([]), 0)
+        self.assertEqual(f([]), 0)
 
     def test_throws(self):
         @throws(ValueError)

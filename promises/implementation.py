@@ -21,7 +21,7 @@ class Implementation(object):
         methods = options.get('methods')
         if methods:
             for item in methods:
-                self.types.update(item)
+                self.methods.append(item)
 
     def require(self, item):
         self.requirements.append(item)
@@ -43,4 +43,5 @@ class Implementation(object):
             if not hasattr(obj, item) or\
                not callable(getattr(obj, item)):
                 return False
+        return True
 
