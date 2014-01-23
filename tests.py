@@ -1,7 +1,21 @@
 from promises import *
+from promises.implementation import Implementation
 from unittest import TestCase, main
 
 class PromisesTestCase(TestCase):
+    def test_implementation(self):
+        impl = Implementation(list)
+        impl.configure({
+            'methods':['append','index']
+            })
+        @defines(impl)
+        def f(x):
+            x.append(0)
+            return x.index(0)
+
+        self.assertRaises(TypeError, f, 1)
+        self.assertEquals(f([]), 0)
+
     def test_throws(self):
         @throws(ValueError)
         def f(x):

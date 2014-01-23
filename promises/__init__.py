@@ -16,9 +16,10 @@
 __all__ = [
     "implements", "accepts", "rejects",
     "requires", "returns", "exposes",
-    "disallows", "throws"
+    "disallows", "throws", "defines"
     ]
 from functools import wraps
+from promises.implementation import Implementation
 
 ARG_NOT_EXPOSED  = "Named argument {0} is not exposed."
 ARG_IS_REQUIRED  = "The argument {0} is required."
@@ -27,6 +28,30 @@ MUST_RETURN_TYPE = "Function must return type[s]: {0}."
 MUST_ACCEPT_TYPE = "Argument {1} must be of type {1}."
 DOESNT_IMPLEMENT = "Object doesn't implement method {0}."
 EXCEPTION_TYPE   = "Raised exception must be of type {0}."
+
+def defines(*pos, **kwd):
+    def wrapper(f):
+        varnames = f.__code__.co_varnames
+        argtypes = dict(zip(varnames, pos))
+        argtypes.update(kwd)
+
+        @wraps(f)
+        def inner(*args, **kwargs):
+            length = len(args)
+            for index, value in enumerate(varnames):
+                impl = argtypes.get(value)
+                if impl is not None:
+                    if index < length:
+                        object_ = args[index]
+                        if not impl.validate(object_):
+                            raise TypeError(DOESNT_IMPLEMENT.format(str(value)))
+                    elif value in kwargs:
+                        object_ = kwargs[value]
+                        if not impl.validate(object_):
+                            raise TypeError(DOESNT_IMPLEMENT.format(str(value)))
+            return f(*args, **kwargs)
+        return inner
+    return wrapper
 
 def throws(*exceptions):
     """
