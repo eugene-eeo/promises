@@ -4,7 +4,7 @@ from unittest import TestCase, main
 
 class PromisesTestCase(TestCase):
     def test_implementation(self):
-        impl = Implementation(list)
+        impl = Implementation(object)
         impl.configure({
             'methods':['append','index']
             })
@@ -13,8 +13,16 @@ class PromisesTestCase(TestCase):
             x.append(0)
             return x.index(0)
 
+        class I(object):
+            def append(self, x):
+                pass
+
+            def index(self, x):
+                pass
+
         self.assertRaises(TypeError, f, 1)
         self.assertEqual(f([]), 0)
+        self.assertTrue(f(I()) is None)
 
     def test_throws(self):
         @throws(ValueError)
