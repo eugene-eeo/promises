@@ -3,6 +3,17 @@ from promises.implementation import Implementation
 from unittest import TestCase, main
 
 class PromisesTestCase(TestCase):
+    def test_results(self):
+        impl = Implementation(object)
+        impl.configure({
+            'methods':['pop']
+            })
+        @results(impl)
+        def f(x):
+            return list(range(x))
+
+        self.assertEqual(f(1), [0])
+
     def test_implementation(self):
         impl = Implementation(object)
         impl.configure({

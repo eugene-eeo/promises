@@ -16,7 +16,8 @@
 __all__ = [
     "implements", "accepts", "rejects",
     "requires", "returns", "exposes",
-    "disallows", "throws", "defines"
+    "disallows", "throws", "defines",
+    "results"
     ]
 from functools import wraps
 from promises.implementation import Implementation
@@ -28,6 +29,19 @@ MUST_RETURN_TYPE = "Function must return type[s]: {0}."
 MUST_ACCEPT_TYPE = "Argument {1} must be of type {1}."
 DOESNT_IMPLEMENT = "Object doesn't implement method {0}."
 EXCEPTION_TYPE   = "Raised exception must be of type {0}."
+IMPLEMENTATION   = "Return value doesn't match spec."
+
+def results(*pos):
+    def wrapper(f):
+        @wraps(f)
+        def inner(*args, **kwargs):
+            res = f(*args, **kwargs)
+            for item in pos:
+                if item.validate(res):
+                    return res
+            raise TypeError(IMPLEMENTATION)
+        return inner
+    return wrapper
 
 def defines(*pos, **kwd):
     """
