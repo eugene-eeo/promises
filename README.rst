@@ -170,6 +170,29 @@ raise a RuntimeError. Usage::
             raise ValueError
         return num/by
 
+^^^^^^^
+defines
+^^^^^^^
+
+Declares that the decorated function will
+only accept positional or keyword (again,
+like ``accepts`` and ``rejects``, it
+doesn't really matter during declaration)
+and will implement the methods defined in
+the given ``Implementation`` objects.
+Usage::
+
+    from promises.implementation import Implementation
+
+    stack = Implementation(object)
+    stack.configure({
+        'methods':['push','pop']
+    })
+
+    @defines(stack)
+    def f(x):
+        # do something!
+
 -----------------
 Running the tests
 -----------------

@@ -8,10 +8,11 @@ class PromisesTestCase(TestCase):
         impl.configure({
             'methods':['append','index']
             })
-        @defines(impl)
-        def f(x):
-            x.append(0)
-            return x.index(0)
+        integer = Implementation(int)
+        @defines(impl, integer)
+        def f(x, y):
+            x.append(y)
+            return x.index(y)
 
         class I(object):
             def append(self, x):
@@ -20,9 +21,9 @@ class PromisesTestCase(TestCase):
             def index(self, x):
                 pass
 
-        self.assertRaises(TypeError, f, 1)
-        self.assertEqual(f([]), 0)
-        self.assertTrue(f(I()) is None)
+        self.assertRaises(TypeError, f, 1, 0)
+        self.assertEqual(f([],0), 0)
+        self.assertTrue(f(I(),0) is None)
 
     def test_throws(self):
         @throws(ValueError)

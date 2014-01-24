@@ -30,6 +30,26 @@ DOESNT_IMPLEMENT = "Object doesn't implement method {0}."
 EXCEPTION_TYPE   = "Raised exception must be of type {0}."
 
 def defines(*pos, **kwd):
+    """
+    Declares that the wrapped function can
+    only accept objects which have defined
+    the required attributes or methods, or
+    types that the Implementation object
+    requires, i.e.::
+
+        >>> from promises.implementation import Implementation
+        >>> impl = Implementation(object)
+        >>> impl.configure({
+        ...     'methods':['append','indexI']
+        ... })
+        >>> stack = Implementation(object)
+        >>> stack.configure({
+        ...     'methods':['push','pop']
+        ... })
+        >>> @defines(impl, stack)
+        ... def f(x, y):
+        ...     # do something
+    """
     def wrapper(f):
         varnames = f.__code__.co_varnames
         argtypes = dict(zip(varnames, pos))
