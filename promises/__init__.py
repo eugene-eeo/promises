@@ -32,6 +32,29 @@ EXCEPTION_TYPE   = "Raised exception must be of type {0}."
 IMPLEMENTATION   = "Return value doesn't match spec."
 
 def results(*pos):
+    """
+    Declares that the wrapped fucntion can
+    only return objects which have defined
+    the required attributes or methods as
+    specified in the Implementation object.
+    For example::
+
+        >>> from promises.implementation import Implementation
+        >>> impl = Implementation(object)
+        >>> impl.configure({
+        ...   'methods':['push','pop']
+        ... })
+        >>> @results(impl)
+        ... def f(x):
+        ...     # do stuff here
+
+    You can pass in as many Implementation
+    objects in as positional arguments and
+    the wrapper will return once one of the
+    Implementations match, so it's a good
+    idea to put the most returned objects
+    first.
+    """
     def wrapper(f):
         @wraps(f)
         def inner(*args, **kwargs):
