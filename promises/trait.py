@@ -1,15 +1,14 @@
 
-Attribute = lambda x: lambda ins: hasattr(ins, x)
-Method    = lambda x: lambda ins: hasattr(ins, x) and callable(getattr(ins,x))
-Object    = lambda x, trait: lambda ins: hasattr(ins, x) and Trait.__validate__(x, trait)
+Attribute = lambda x: lambda z, ins: hasattr(ins, x)
+Method    = lambda x: lambda z, ins: hasattr(ins, x) and callable(getattr(ins,x))
 
 class Trait(object):
-    def __validate__(trait, obj):
-        for item in dir(trait):
+    def __validate__(self, obj):
+        for item in dir(self):
             if not item.startswith('__'):
-                required = getattr(trait, item)
+                required = getattr(self, item)
                 if isinstance(required, Trait):
-                    required = lambda x: Trait.__validate__(required, x)
+                    required = lambda x: hasattr(x, item) and required.validate(x)
 
                 if not required(obj):
                     return False
@@ -18,7 +17,9 @@ class Trait(object):
 def includes(*traits):
     def function(cls):
         for trait in traits:
+            instance = trait()
             for item in dir(trait):
                 if not item.startswith('__'):
-                    setattr(cls, item, getattr(trait, item))
+                    setattr(cls, item, getattr(instance, item))
+        return cls
     return function

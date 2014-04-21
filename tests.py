@@ -4,29 +4,28 @@ from unittest import TestCase, main
 
 class PromisesTestCase(TestCase):
     def test_traits(self):
-        class Copyable(Trait):
-            copy = Method('copy')
+        class Countable(Trait):
+            count = Method('count')
 
-        @includes(Copyable)
-        def ArrayLike(Trait):
+        @includes(Countable)
+        class ArrayLike(Trait):
             append = Method('append')
             index  = Method('index')
 
-        @implements(Copyable)
-        def copy(x):
-            return x.copy()
+        @implements(Countable)
+        def count(x):
+            return x.count(1)
 
         @implements(ArrayLike)
-        def append_to_copy(x, y):
-            c = x.copy()
-            c.append(y)
-            return c
+        def append(x, y):
+            x.append(y)
+            return x
 
-        self.assertRaises(TypeError, copy, object)
-        self.assertRaises(TypeError, append_to_copy, object)
+        self.assertRaises(TypeError, count, object)
+        self.assertRaises(TypeError, append, object)
 
-        self.assertEqual(copy([1]), [1])
-        self.assertEqual(append_to_copy([], 1), [1])
+        self.assertEqual(count([1]), 1)
+        self.assertEqual(append([], 1), [1])
 
     def test_rejects(self):
         @rejects(float)

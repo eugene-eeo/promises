@@ -1,23 +1,27 @@
 from functools import wraps
 from itertools import chain
 from collections import defaultdict
-from promises.trait import Trait
 
 __all__ = ['implements','requires','accepts','returns','rejects']
+
+obj_getter = lambda: object
 
 def implements(*args, **kw):
     def function(f):
         code = f.__code__
         varnames = code.co_varnames[:code.co_argcount]
-        types = defaultdict(object)
-        types.update(kw)
+
+        types = {}
         types.update(dict(zip(varnames, args)))
+        types.update(kw)
+
+        types = {i:k() for i,k in types.items()}
 
         @wraps(f)
         def wrapper(*args, **kwargs):
             iterable = chain(zip(varnames, args), kwargs.items())
             for varname, arg in iterable:
-                if not Trait.__validate__(types[varname], arg):
+                if varname in types and not types[varname].__validate__(arg):
                     raise TypeError
 
             return f(*args, **kwargs)
@@ -62,7 +66,7 @@ def rejects(*args, **kw):
         code = f.__code__
         varnames = code.co_varnames[:code.co_argcount]
 
-        types = defaultdict(object)
+        types = defaultdict(obj_getter)
         types.update(kw)
         types.update(dict(zip(varnames, args)))
 
@@ -82,7 +86,7 @@ def accepts(*args, **kw):
         code = f.__code__
         varnames = code.co_varnames[:code.co_argcount]
 
-        types = defaultdict(object)
+        types = defaultdict(obj_getter)
         types.update(kw)
         types.update(dict(zip(varnames, args)))
 
