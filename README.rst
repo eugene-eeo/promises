@@ -121,6 +121,20 @@ to the passed in arguments::
     def copy(x, times):
         return [x.copy for i in range(times)]
 
+~~~~~~~~
+requires
+~~~~~~~~
+
+Declares that the function will require
+the given keyword arguments when calling,
+regardless if the objects passed in were
+captured by the keyword arguments. (This
+**will** change in the future)::
+
+    @requires('config')
+    def lint(config):
+        # do something here
+
 -----------------
 Running the tests
 -----------------
