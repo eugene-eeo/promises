@@ -53,7 +53,7 @@ number of positional and keyword
 arguments, which types will be used
 to test against the passed-in objects.
 Variable-name mapping is done
-automatically, so no worries.:
+automatically, so no worries.::
 
     @accepts(list, int)
     def inc_last(array, inc=1):
@@ -67,7 +67,7 @@ returns
 
 Declares that the decorated function
 will return a certain type, for
-example:
+example::
 
     @returns((int, float))
     def div(x,y):
@@ -87,7 +87,7 @@ the passed in objects correspond to
 the required types. For example, to
 implement a grouping function that
 forces the user to cover all possible
-cases:
+cases::
 
     @rejects(defaultdict)
     def group(g, datum):
@@ -103,7 +103,7 @@ implements
 ~~~~~~~~~~
 
 Declares that the argument passed in
-must conform to the given trait, i.e.:
+must conform to the given trait, i.e.::
 
     class Copyable(object):
         copy = Method('copy')
