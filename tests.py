@@ -1,84 +1,32 @@
 from promises import *
-from promises.implementation import Implementation
+from promises.trait import *
 from unittest import TestCase, main
 
 class PromisesTestCase(TestCase):
-    def test_results(self):
-        impl = Implementation(object)
-        impl.configure({
-            'methods':['pop']
-            })
-        @results(impl)
-        def f(x):
-            return list(range(x))
+    def test_traits(self):
+        class Copyable(Trait):
+            copy = Method('copy')
 
-        self.assertEqual(f(1), [0])
+        @includes(Copyable)
+        def ArrayLike(Trait):
+            append = Method('append')
+            index  = Method('index')
 
-    def test_implementation(self):
-        impl = Implementation(object)
-        impl.configure({
-            'methods':['append','index']
-            })
-        integer = Implementation(int)
-        @defines(impl, integer)
-        def f(x, y):
-            x.append(y)
-            return x.index(y)
-
-        class I(object):
-            def append(self, x):
-                pass
-
-            def index(self, x):
-                pass
-
-        self.assertRaises(TypeError, f, 1, 0)
-        self.assertEqual(f([],0), 0)
-        self.assertTrue(f(I(),0) is None)
-
-    def test_throws(self):
-        @throws(ValueError)
-        def f(x):
-            if x < 0:
-                raise ValueError
-            raise OSError
-        self.assertRaises(RuntimeError, f, 2)
-        self.assertRaises(ValueError, f, -1)
-
-    def test_disallows(self):
-        @disallows("x")
-        def f(x):
-            return x+1
-        self.assertRaises(TypeError, f, x=1)
-        self.assertEqual(f(1), 2)
-
-        @disallows("*")
-        def f(x, u=1):
-            return x+u
-        self.assertRaises(TypeError, f, x=1)
-        self.assertEqual(f(1), 2)
-
-    def test_exposes(self):
-        @returns(int)
-        @exposes("x")
-        def f(x):
-            return x+1
-        self.assertEqual(f(3), 4)
-        self.assertRaises(TypeError, f, u=1)
-
-        @exposes("*")
-        def f(x):
-            return x+1
-        self.assertEqual(f(x=2), 3)
-        self.assertRaises(TypeError, f, 2)
-
-    def test_implements(self):
-        @implements("copy")
-        def f(x):
-            "Basic stuff"
+        @implements(Copyable)
+        def copy(x):
             return x.copy()
-        self.assertRaises(TypeError, f, 5)
-        self.assertEqual(f.__doc__, "Basic stuff")
+
+        @implements(ArrayLike)
+        def append_to_copy(x, y):
+            c = x.copy()
+            c.append(y)
+            return c
+
+        self.assertRaises(TypeError, copy, object)
+        self.assertRaises(TypeError, append_to_copy, object)
+
+        self.assertEqual(copy([1]), [1])
+        self.assertEqual(append_to_copy([], 1), [1])
 
     def test_rejects(self):
         @rejects(float)
@@ -89,7 +37,7 @@ class PromisesTestCase(TestCase):
         self.assertEqual(a(2), a(x=2))
         self.assertEqual(a.__doc__, "Basic stuff")
 
-    def test_require(self):
+    def test_requires(self):
         @requires("node")
         def f(node):
             return ""
