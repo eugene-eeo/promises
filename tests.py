@@ -50,6 +50,11 @@ class PromisesTestCase(TestCase):
             return ""
         self.assertRaises(TypeError, f, 10)
 
+        @returns((int, bool))
+        def f(x):
+            return 1, False
+        self.assertEqual(f(10), (1, False))
+
     def test_accepts(self):
         @accepts(int)
         def f(x):
