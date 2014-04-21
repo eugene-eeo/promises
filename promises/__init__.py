@@ -11,11 +11,13 @@ def implements(*args, **kw):
         code = f.__code__
         varnames = code.co_varnames[:code.co_argcount]
 
-        types = {}
-        types.update(dict(zip(varnames, args)))
-        types.update(kw)
+        temp = {}
+        temp.update(dict(zip(varnames, args)))
+        temp.update(kw)
 
-        types = {i:k() for i,k in types.items()}
+        types = {}
+        for item, ins in temp.items():
+            types[item] = ins()
 
         @wraps(f)
         def wrapper(*args, **kwargs):
