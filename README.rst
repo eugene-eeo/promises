@@ -115,7 +115,7 @@ must conform to the given trait, i.e.::
 You can also pass multiple arguments
 and like the ``accepts`` function it
 will automatically map function arguments
-to the passed in arguments:
+to the passed in arguments::
 
     @implements(Copyable, int)
     def copy(x, times):
