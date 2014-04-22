@@ -140,7 +140,7 @@ throws
 ~~~~~~
 
 Declares that the function can only throw
-the specified exceptions, for example:
+the specified exceptions, for example::
 
     @accepts(float, float)
     @throws(ZeroDivisionError)
