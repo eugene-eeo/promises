@@ -135,6 +135,22 @@ captured by the keyword arguments. (This
     def lint(config):
         # do something here
 
+~~~~~~
+throws
+~~~~~~
+
+Declares that the function can only throw
+the specified exceptions, for example:
+
+    @accepts(float, float)
+    @throws(ZeroDivisionError)
+    def divide(x,y):
+        return x/y
+
+This is good for debugging or development
+when you want to make sure that your
+function throws the given exceptions.
+
 -----------------
 Running the tests
 -----------------
