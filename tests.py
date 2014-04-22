@@ -3,6 +3,15 @@ from promises.trait import *
 from unittest import TestCase, main
 
 class PromisesTestCase(TestCase):
+    def test_throws(self):
+        @accepts(Exception)
+        @throws(IOError, OSError)
+        def ioerror_raiser(exc):
+            raise exc
+
+        self.assertRaises(TypeError, ioerror_raiser, NameError)
+        self.assertRaises(OSError, ioerror_raiser, OSError)
+
     def test_traits(self):
         class Countable(Trait):
             count = Method('count')

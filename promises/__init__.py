@@ -2,9 +2,23 @@ from functools import wraps
 from itertools import chain
 from collections import defaultdict
 
-__all__ = ['implements','requires','accepts','returns','rejects']
+__all__ = ['implements','requires','accepts','returns','rejects','throws']
 
 obj_getter = lambda: object
+
+def throws(*execptions):
+    def function(f):
+        @wraps(f)
+        def wrapper(*args, **kwargs):
+            try:
+                return f(*args, **kwargs)
+            except Exception as exc:
+                if not isinstance(exc, execptions):
+                    raise TypeError
+                else:
+                    raise
+        return wrapper
+    return function
 
 def implements(*args, **kw):
     def function(f):
