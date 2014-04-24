@@ -1,6 +1,27 @@
 from promises import *
-from promises.trait import *
+from promises.trait import spec
+from collections import defaultdict
 from unittest import TestCase, main
+
+class TraitsTestCase(TestCase):
+    def test_dictionary(self):
+        @returns(int)
+        @implements(data=spec.Dictionary)
+        def increment_key(data, key, inc=1):
+            data[key] += inc
+            return data[key]
+
+        a = defaultdict(int)
+        self.assertEqual(increment_key(a, "a"), 1)
+
+    def test_list(self):
+        @implements(data=spec.List)
+        def increment_index(data, index, inc=1):
+            data[index] += inc
+            return data[index]
+
+        a = [0]
+        self.assertEqual(increment_index(a, 0), 1)
 
 class PromisesTestCase(TestCase):
     def test_throws(self):

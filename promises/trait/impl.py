@@ -1,4 +1,6 @@
 
+__all__ = ["Attribute","Method","Trait","includes"]
+
 Attribute = lambda x: lambda z, ins: hasattr(ins, x)
 Method    = lambda x: lambda z, ins: hasattr(ins, x) and callable(getattr(ins,x))
 

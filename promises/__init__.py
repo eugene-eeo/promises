@@ -1,10 +1,32 @@
 from functools import wraps
 from itertools import chain
 from collections import defaultdict
-
-__all__ = ['implements','requires','accepts','returns','rejects','throws']
+from promises.trait.impl import *
 
 obj_getter = lambda: object
+__all__ = ['implements','requires','accepts','returns',
+           'rejects','throws','Trait','Method','Attribute',
+           'includes']
+
+def accepts(*args, **kw):
+    def function(f):
+        code = f.__code__
+        varnames = code.co_varnames[:code.co_argcount]
+
+        types = defaultdict(obj_getter)
+        types.update(kw)
+        types.update(dict(zip(varnames, args)))
+
+        @wraps(f)
+        def wrapper(*args, **kwargs):
+            iterable = chain(zip(varnames, args), kwargs.items())
+            for varname, arg in iterable:
+                if not isinstance(arg, types[varname]):
+                    raise TypeError
+            return f(*args, **kwargs)
+
+        return wrapper
+    return function
 
 def throws(*execptions):
     def function(f):
@@ -58,6 +80,7 @@ def requires(*needed):
 def returns(*types):
     def function(f):
         length = len(types)
+
         @wraps(f)
         def wrapper(*args, **kwargs):
             result = f(*args, **kwargs)
@@ -69,11 +92,12 @@ def returns(*types):
                     counter += 1
                 if counter != length:
                     raise TypeError
+                return result
 
-            else:
-                if not isinstance(result, types):
-                    raise TypeError
+            if not isinstance(result, types):
+                raise TypeError
             return result
+
         return wrapper
     return function
 
@@ -91,26 +115,6 @@ def rejects(*args, **kw):
             iterable = chain(zip(varnames, args), kwargs.items())
             for varname, arg in iterable:
                 if isinstance(arg, types[varname]):
-                    raise TypeError
-            return f(*args, **kwargs)
-
-        return wrapper
-    return function
-
-def accepts(*args, **kw):
-    def function(f):
-        code = f.__code__
-        varnames = code.co_varnames[:code.co_argcount]
-
-        types = defaultdict(obj_getter)
-        types.update(kw)
-        types.update(dict(zip(varnames, args)))
-
-        @wraps(f)
-        def wrapper(*args, **kwargs):
-            iterable = chain(zip(varnames, args), kwargs.items())
-            for varname, arg in iterable:
-                if not isinstance(arg, types[varname]):
                     raise TypeError
             return f(*args, **kwargs)
 
