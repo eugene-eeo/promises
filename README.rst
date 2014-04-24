@@ -105,7 +105,8 @@ implements
 Declares that the argument passed in
 must conform to the given trait, i.e.::
 
-    class Copyable(object):
+    from promises.trait import Trait
+    class Copyable(Trait):
         copy = Method('copy')
 
     @implements(Copyable)
@@ -120,6 +121,18 @@ to the passed in arguments::
     @implements(Copyable, int)
     def copy(x, times):
         return [x.copy for i in range(times)]
+
+Commonly used constructs are also
+implemented within the library as
+`generics`, and can be used as
+following::
+
+    from promises.trait import includes, Trait
+    from promises.trait.spec import Dictionary
+    
+    @includes(Dictionary)
+    class MyTrait(Trait):
+        pass
 
 ~~~~~~~~
 requires
