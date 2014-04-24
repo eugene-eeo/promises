@@ -20,7 +20,6 @@ class List(Trait):
     sort   = Method("sort")
 
 @includes(List)
-@includes(MetaBuilder(methods=["pop","push"]))
 class Stack(Trait):
     push = Method("push")
     pop  = Method("pop")
