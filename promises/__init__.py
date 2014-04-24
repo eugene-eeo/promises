@@ -68,10 +68,16 @@ def implements(*args, **kw):
 
 def requires(*needed):
     def function(f):
+        code = f.__code__
+        varnames = code.co_varnames[:code.co_argcount]
+
         @wraps(f)
         def wrapper(*args, **kwargs):
+            temp = list(kwargs.keys())
+            temp.extend(map(lambda x: x[0], zip(varnames, args)))
+
             for item in needed:
-                if item not in kwargs:
+                if item in temp and item not in kwargs:
                     raise TypeError
             return f(*args, **kwargs)
         return wrapper
