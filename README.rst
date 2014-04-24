@@ -140,9 +140,9 @@ requires
 
 Declares that the function will require
 the given keyword arguments when calling,
-regardless if the objects passed in were
-captured by the keyword arguments. (This
-**will** change in the future)::
+if and only if they were captured by the
+keyword arguments, meaning you'll have
+to define some defaults.::
 
     @requires('config')
     def lint(config):
