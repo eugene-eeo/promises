@@ -134,6 +134,18 @@ following::
     class MyTrait(Trait):
         pass
 
+While the library doesn't support
+typechecking the positional arguments,
+the ``Each`` generic type does,
+and you can use it like so:
+
+    @implements(Each(int))
+    @returns(int)
+    def sum_int(*x):
+        return sum(x)
+
+    sum(*[1,2,3,4]) # => 10
+
 ~~~~~~~~
 requires
 ~~~~~~~~
