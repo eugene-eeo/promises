@@ -40,7 +40,7 @@ class Trait(object):
     the object. The constructor also needs
     to accept zero arguments.
     """
-    def __validate__(self, obj):
+    def __instancecheck__(self, obj):
         """
         Validates a given object according
         to the callbacks assigned to each
@@ -51,7 +51,7 @@ class Trait(object):
         either True or False. Example
         usage::
 
-            >>> trait.__validate__(obj)
+            >>> isinstance("", String)
             True
 
         :param obj: The object to validate

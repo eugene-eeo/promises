@@ -6,7 +6,7 @@ from unittest import TestCase, main
 class TraitsTestCase(TestCase):
     def test_each(self):
         @returns(int)
-        @implements(spec.Each(int))
+        @accepts(spec.Each(int))
         def sum_int(*x):
             return sum(x)
 
@@ -15,7 +15,7 @@ class TraitsTestCase(TestCase):
 
     def test_dictionary(self):
         @returns(int)
-        @implements(data=spec.Dictionary)
+        @accepts(data=spec.Dictionary)
         def increment_key(data, key, inc=1):
             data[key] += inc
             return data[key]
@@ -24,7 +24,7 @@ class TraitsTestCase(TestCase):
         self.assertEqual(increment_key(a, "a"), 1)
 
     def test_list(self):
-        @implements(data=spec.List)
+        @accepts(data=spec.List)
         def increment_index(data, index, inc=1):
             data[index] += inc
             return data[index]
@@ -52,11 +52,11 @@ class PromisesTestCase(TestCase):
 
         includes(Countable)(ArrayLike)
 
-        @implements(Countable)
+        @accepts(Countable)
         def count(x):
             return x.count(1)
 
-        @implements(ArrayLike)
+        @accepts(ArrayLike)
         def append(x, y):
             x.append(y)
             return x

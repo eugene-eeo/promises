@@ -4,18 +4,23 @@ from collections import defaultdict
 from promises.trait.impl import *
 
 obj_getter = lambda: object
-__all__ = ['implements','requires','accepts','returns',
-           'rejects','throws','Trait','Method','Attribute',
-           'includes']
+__all__ = ['requires','accepts','returns','rejects',
+           'throws','Trait','Method','Attribute','includes']
 
 def accepts(*args, **kw):
     def function(f):
         code = f.__code__
         varnames = code.co_varnames[:code.co_argcount]
 
+        tmp = {}
+        tmp.update(kw)
+        tmp.update(dict(zip(varnames, args)))
+
         types = defaultdict(obj_getter)
-        types.update(kw)
-        types.update(dict(zip(varnames, args)))
+        for key, value in tmp.items():
+            if isinstance(value, type) and issubclass(value, Trait):
+                value = value()
+            types[key] = value
 
         @wraps(f)
         def wrapper(*args, **kwargs):
@@ -39,30 +44,6 @@ def throws(*execptions):
                     raise TypeError
                 else:
                     raise
-        return wrapper
-    return function
-
-def implements(*args, **kw):
-    def function(f):
-        code = f.__code__
-        varnames = code.co_varnames[:code.co_argcount]
-
-        temp = {}
-        temp.update(dict(zip(varnames, args)))
-        temp.update(kw)
-
-        types = {}
-        for item, ins in temp.items():
-            types[item] = ins()
-
-        @wraps(f)
-        def wrapper(*args, **kwargs):
-            iterable = chain(zip(varnames, args), kwargs.items())
-            for varname, arg in iterable:
-                if varname in types and not types[varname].__validate__(arg):
-                    raise TypeError
-
-            return f(*args, **kwargs)
         return wrapper
     return function
 
