@@ -63,6 +63,18 @@ automatically, so no worries.
             array.append(0)
         array[-1] += inc
 
+Note that you can now use traits
+as parts of the accepted types,
+so you do not need separate
+decorators:
+
+.. code-block:: python
+
+    @accepts(list, Each(int))
+    def append_integers(array, *nums):
+        for item in nums:
+            array.append(item)
+
 ~~~~~~~
 returns
 ~~~~~~~
@@ -103,62 +115,6 @@ cases:
                 if match(item):
                     registry[group].append(item)
         return registry
-
-~~~~~~~~~~
-implements
-~~~~~~~~~~
-
-Declares that the argument passed in
-must conform to the given trait, i.e.
-
-.. code-block:: python
-
-    from promises.trait import Trait
-    class Copyable(Trait):
-        copy = Method('copy')
-
-    @implements(Copyable)
-    def copy(x):
-        return x
-
-You can also pass multiple arguments
-and like the ``accepts`` function it
-will automatically map function arguments
-to the passed in arguments:
-
-.. code-block:: python
-
-    @implements(Copyable, int)
-    def copy(x, times):
-        return [x.copy for i in range(times)]
-
-Commonly used constructs are also
-implemented within the library as
-`generics`, and can be used as
-following:
-
-.. code-block:: python
-
-    from promises.trait import includes, Trait
-    from promises.trait.spec import Dictionary
-    
-    @includes(Dictionary)
-    class MyTrait(Trait):
-        pass
-
-While the library doesn't support
-typechecking the positional arguments,
-the ``Each`` generic type does,
-and you can use it like so:
-
-.. code-block:: python
-
-    @implements(Each(int))
-    @returns(int)
-    def sum_int(*x):
-        return sum(x)
-
-    sum_int(*[1,2,3,4]) # => 10
 
 ~~~~~~~~
 requires
