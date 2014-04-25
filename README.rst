@@ -144,7 +144,7 @@ and you can use it like so::
     def sum_int(*x):
         return sum(x)
 
-    sum(*[1,2,3,4]) # => 10
+    sum_int(*[1,2,3,4]) # => 10
 
 ~~~~~~~~
 requires
