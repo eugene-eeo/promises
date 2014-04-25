@@ -94,6 +94,27 @@ class Collection(Trait):
     values = Method("values")
 
 class Each(object):
+    """
+    A metaclass which produces a new generic
+    type of class ``Trait`` which validates
+    iterables. In particular, every object
+    within the iterable must conform to the
+    type specified. For example, to implement
+    a function that saves all MongoEngine
+    documents::
+
+        >>> from promises.trait.spec import Each
+        >>> from promises import implements
+        >>> @implements(Each(Document))
+        ... def save_all(*docs):
+        ...     for item in docs:
+        ...         item.save()
+        ...
+
+    :param typename: Any number of types or
+        traits that you want to be able to
+        implement.
+    """
     def __new__(self, *typename):
         new = type("generic-each", (Trait,), {})
         def valid(ins, x):
