@@ -53,7 +53,9 @@ number of positional and keyword
 arguments, which types will be used
 to test against the passed-in objects.
 Variable-name mapping is done
-automatically, so no worries.::
+automatically, so no worries.
+
+.. code-block:: python
 
     @accepts(list, int)
     def inc_last(array, inc=1):
@@ -67,7 +69,9 @@ returns
 
 Declares that the decorated function
 will return a certain type, for
-example::
+example:
+
+.. code-block:: python
 
     @returns((int, float))
     def div(x,y):
@@ -87,7 +91,9 @@ the passed in objects correspond to
 the required types. For example, to
 implement a grouping function that
 forces the user to cover all possible
-cases::
+cases:
+
+.. code-block:: python
 
     @rejects(defaultdict)
     def group(g, datum):
@@ -103,7 +109,9 @@ implements
 ~~~~~~~~~~
 
 Declares that the argument passed in
-must conform to the given trait, i.e.::
+must conform to the given trait, i.e.
+
+.. code-block:: python
 
     from promises.trait import Trait
     class Copyable(Trait):
@@ -116,7 +124,9 @@ must conform to the given trait, i.e.::
 You can also pass multiple arguments
 and like the ``accepts`` function it
 will automatically map function arguments
-to the passed in arguments::
+to the passed in arguments:
+
+.. code-block:: python
 
     @implements(Copyable, int)
     def copy(x, times):
@@ -125,7 +135,9 @@ to the passed in arguments::
 Commonly used constructs are also
 implemented within the library as
 `generics`, and can be used as
-following::
+following:
+
+.. code-block:: python
 
     from promises.trait import includes, Trait
     from promises.trait.spec import Dictionary
@@ -137,7 +149,9 @@ following::
 While the library doesn't support
 typechecking the positional arguments,
 the ``Each`` generic type does,
-and you can use it like so::
+and you can use it like so:
+
+.. code-block:: python
 
     @implements(Each(int))
     @returns(int)
@@ -154,7 +168,9 @@ Declares that the function will require
 the given keyword arguments when calling,
 if and only if they were captured by the
 keyword arguments, meaning you'll have
-to define some defaults.::
+to define some defaults.
+
+.. code-block:: python
 
     @requires('config')
     def lint(config):
@@ -165,7 +181,9 @@ throws
 ~~~~~~
 
 Declares that the function can only throw
-the specified exceptions, for example::
+the specified exceptions, for example:
+
+.. code-block:: python
 
     @accepts(float, float)
     @throws(ZeroDivisionError)
