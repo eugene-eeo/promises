@@ -37,10 +37,11 @@ class PromisesTestCase(TestCase):
         class Countable(Trait):
             count = Method('count')
 
-        @includes(Countable)
         class ArrayLike(Trait):
             append = Method('append')
             index  = Method('index')
+
+        includes(Countable)(ArrayLike)
 
         @implements(Countable)
         def count(x):
@@ -76,8 +77,9 @@ class PromisesTestCase(TestCase):
     def test_returns(self):
         @returns(int)
         def f(x):
-            return ""
-        self.assertRaises(TypeError, f, 10)
+            return x
+        self.assertRaises(TypeError, f, "")
+        self.assertEqual(1, f(1))
 
         @returns((int, bool))
         def f(x):
