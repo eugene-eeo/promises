@@ -92,3 +92,15 @@ class Collection(Trait):
     keys   = Method("keys")
     update = Method("update")
     values = Method("values")
+
+class Each(object):
+    def __new__(self, *typename):
+        new = type("generic-each", (Trait,), {})
+        def valid(ins, x):
+            for item in x:
+                if not isinstance(item, typename):
+                    return False
+            return True
+        new.__validate__ = valid
+        return new
+

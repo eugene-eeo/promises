@@ -4,6 +4,15 @@ from collections import defaultdict
 from unittest import TestCase, main
 
 class TraitsTestCase(TestCase):
+    def test_each(self):
+        @returns(int)
+        @implements(spec.Each(int))
+        def sum_int(*x):
+            return sum(x)
+
+        self.assertRaises(TypeError, sum_int, "x")
+        self.assertEqual(sum_int(1,2,3), 6)
+
     def test_dictionary(self):
         @returns(int)
         @implements(data=spec.Dictionary)
