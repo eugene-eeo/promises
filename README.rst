@@ -137,7 +137,7 @@ following::
 While the library doesn't support
 typechecking the positional arguments,
 the ``Each`` generic type does,
-and you can use it like so:
+and you can use it like so::
 
     @implements(Each(int))
     @returns(int)
