@@ -66,7 +66,8 @@ automatically, so no worries.
 Note that you can now use traits
 as parts of the accepted types,
 so you do not need separate
-decorators:
+decorators in order to use the
+traits system:
 
 .. code-block:: python
 

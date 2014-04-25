@@ -18,8 +18,9 @@
         >>> join([1,2], [3,4])
         [1, 2, 3, 4]
 
-    Sadly, generic types do not respond to ``isinstance``
-    calls nor can they be implemented to be like that.
+    Generic types do respond to isinstance calls
+    after the ``__instancecheck__`` hook was made
+    in the ``Trait`` class.
 """
 
 from promises.trait.impl import *
