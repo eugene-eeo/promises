@@ -123,6 +123,6 @@ class Each(object):
                 if not isinstance(item, typename):
                     return False
             return True
-        new.__validate__ = valid
+        new.__instancecheck__ = valid
         return new
 
