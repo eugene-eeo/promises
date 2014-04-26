@@ -117,12 +117,12 @@ class Each(object):
         implement.
     """
     def __new__(self, *typename):
-        new = type("generic-each", (Trait,), {})
         def valid(ins, x):
             for item in x:
                 if not isinstance(item, typename):
                     return False
             return True
-        new.__instancecheck__ = valid
+        data = {"__instancecheck__": valid}
+        new = type("generic-each", (Trait,), data)
         return new
 
