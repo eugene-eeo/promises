@@ -130,8 +130,23 @@ to define some defaults.
 .. code-block:: python
 
     @requires('config')
-    def lint(config):
+    def lint(config="filename"):
         # do something here
+
+Note: If you are using Python 3, the better
+way would be to use the "*" symbol, like
+the following:
+
+.. code-block:: python
+
+    def lint(*, config="filename"):
+        # do something here
+
+As it will provide the same functionality
+as the requires decorator. However you
+really want to force the use of keyword
+arguments, you can use the ``force_requires``
+decorator.
 
 ~~~~~~
 throws

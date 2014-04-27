@@ -1,5 +1,7 @@
 from promises import *
-from promises.trait import spec
+from promises import force_requires
+from promises.trait import *
+import promises.trait.spec as spec
 from collections import defaultdict
 from unittest import TestCase, main
 
@@ -78,10 +80,16 @@ class PromisesTestCase(TestCase):
 
     def test_requires(self):
         @requires("node")
-        def f(node):
+        def f(node=1):
             return ""
         self.assertRaises(TypeError, f, 10)
         self.assertEqual(f(node=2), "")
+
+        @force_requires("node")
+        def f(node):
+            return 1
+        self.assertRaises(TypeError, f, 10)
+        self.assertEqual(f(node=1), 1)
 
     def test_returns(self):
         @returns(int)

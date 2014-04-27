@@ -47,4 +47,4 @@
         ...
 """
 
-from promises.trait.impl import Trait, includes
+from promises.trait.impl import *

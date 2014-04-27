@@ -1,11 +1,11 @@
 from functools import wraps
 from itertools import chain
 from collections import defaultdict
-from promises.trait.impl import *
+from promises.trait import Trait
 
 obj_getter = lambda: object
 __all__ = ['requires','accepts','returns','rejects',
-           'throws','Trait','Method','Attribute','includes']
+           'throws']
 
 def accepts(*args, **kw):
     def function(f):
@@ -59,6 +59,17 @@ def requires(*needed):
 
             for item in needed:
                 if item in temp and item not in kwargs:
+                    raise TypeError
+            return f(*args, **kwargs)
+        return wrapper
+    return function
+
+def force_requires(*needed):
+    def function(f):
+        @wraps(f)
+        def wrapper(*args, **kwargs):
+            for item in needed:
+                if item not in kwargs:
                     raise TypeError
             return f(*args, **kwargs)
         return wrapper
