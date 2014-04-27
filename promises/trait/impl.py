@@ -84,17 +84,22 @@ def includes(*traits):
     However it is important to note that
     due to Python 2's bound function
     semantics, the included instance
-    will called.
+    will called. However, note that
+    the attributes defined in the
+    decorated class will have higher
+    imporance and will not be overriden.
 
     :param traits: Any number of traits
         to include in the decorated
         trait.
     """
     def function(cls):
+        contained = dir(cls)
         for trait in traits:
             instance = trait()
             for item in dir(trait):
-                if not item.startswith('__'):
+                if item not in contained and \
+                        not item.startswith('__'):
                     setattr(cls, item, getattr(instance, item))
         return cls
     return function
