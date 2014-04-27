@@ -192,6 +192,40 @@ This is good for debugging or development
 when you want to make sure that your
 function throws the given exceptions.
 
+-----------------------
+Single dispatch methods
+-----------------------
+
+In Python 3, the ``functools`` library
+includes the ``singledispatch`` method,
+which accepts an argspec and then makes
+callables which, different ones can be
+called based on their type. Using that
+it's possible to build PEP443_-style
+generic dispatched functions. For
+example:
+
+.. code-block:: python
+
+    from promises.trait.spec import Number
+    from functools import singledispatch
+
+    @singledispatch
+    def method(x):
+        raise TypeError("Unexpected type.")
+
+    @method.register(Number)
+    def _(x):
+        return x*2
+
+Keep in mind that single-dispatch
+generic functions do come at a cost,
+especially if they are done so at
+runtime, unless you use a JIT like
+PyPy.
+
+.. _PEP443: https://www.python.org/dev/peps/pep-0443
+
 -----------------
 Running the tests
 -----------------
