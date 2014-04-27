@@ -40,7 +40,7 @@ class MetaBuilder(object):
 ITEMS = MetaBuilder(methods=["__iter__","__setitem__","__delitem__",
                              "__getitem__","__contains__"])
 
-@includes(_ITEMS)
+@includes(ITEMS)
 class List(Trait):
     """
     A generic ``List`` type that needs the
@@ -68,7 +68,7 @@ class Stack(Trait):
     push = Method("push")
     pop  = Method("pop")
 
-@includes(_ITEMS)
+@includes(ITEMS)
 class Dictionary(Trait):
     """
     A dictionary trait only has a few requirements,
