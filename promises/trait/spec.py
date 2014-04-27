@@ -106,8 +106,8 @@ class Each(object):
     documents::
 
         >>> from promises.trait.spec import Each
-        >>> from promises import implements
-        >>> @implements(Each(Document))
+        >>> from promises import accepts
+        >>> @accepts(Each(Document))
         ... def save_all(*docs):
         ...     for item in docs:
         ...         item.save()
@@ -130,6 +130,26 @@ class Each(object):
 NUM = (float, complex, int)
 
 class Number(Trait):
+    """
+    A generic ``Number`` type that validates
+    any instance of ``long``, ``float``,
+    ``int``, or ``complex``. However, take
+    note that ``long`` is only available in
+    Python 2.x. Use this in type checked
+    functions that accept/return numerical
+    types::
+
+        >>> from promises.trait.spec import Number
+        >>> from promises import accepts
+        >>> @accepts(Number)
+        ... def f(x):
+        ...     return x+1
+
+    This trait subclass does not perform
+    any of the expected method/attribute
+    checking, but will just validate based
+    on the instance type.
+    """
     typecheck = lambda self, x: isinstance(x, NUM)
     if version_info[0] == 2:
         typecheck = lambda self, x: isinstance(x, NUM + (long,))
