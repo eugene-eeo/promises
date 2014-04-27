@@ -117,9 +117,9 @@ cases:
                     registry[group].append(item)
         return registry
 
-~~~~~~~~
-requires
-~~~~~~~~
+~~~~~~
+kwonly
+~~~~~~
 
 Declares that the function will require
 the given keyword arguments when calling,
@@ -145,8 +145,34 @@ the following:
 As it will provide the same functionality
 as the requires decorator. However you
 really want to force the use of keyword
-arguments, you can use the ``force_requires``
+arguments, you can use the ``requires``
 decorator.
+
+~~~~~~~~
+requires
+~~~~~~~~
+
+Declares that the function will require
+one or more keyword arguments when invoked
+regardless if they were captured. This is
+a forced variant of the ``kwonly`` decorator.
+For example:
+
+.. code-block:: python
+
+    class CombineTrait(Trait):
+        combine = Method("combine")
+
+    @accepts(CombineTrait)
+    @requires("x", "y")
+    def combine(x, y):
+        return x.combine(y)
+
+Another captured-variable variant of the
+decorator is the ``kwonly`` decorator. It
+is recommended over this if you want to
+set default variables but only check captured
+ones.
 
 ~~~~~~
 throws

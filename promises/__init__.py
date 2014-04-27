@@ -5,7 +5,7 @@ from promises.trait import Trait
 
 obj_getter = lambda: object
 __all__ = ['requires','accepts','returns','rejects',
-           'throws']
+           'throws', 'kwonly']
 
 def accepts(*args, **kw):
     def function(f):
@@ -47,7 +47,7 @@ def throws(*execptions):
         return wrapper
     return function
 
-def requires(*needed):
+def kwonly(*needed):
     def function(f):
         code = f.__code__
         varnames = code.co_varnames[:code.co_argcount]
@@ -64,7 +64,7 @@ def requires(*needed):
         return wrapper
     return function
 
-def force_requires(*needed):
+def requires(*needed):
     def function(f):
         @wraps(f)
         def wrapper(*args, **kwargs):

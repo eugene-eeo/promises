@@ -1,5 +1,4 @@
 from promises import *
-from promises import force_requires
 from promises.trait import *
 import promises.trait.spec as spec
 from collections import defaultdict
@@ -80,13 +79,13 @@ class PromisesTestCase(TestCase):
 
     def test_requires(self):
         @requires("node")
-        def f(node=1):
+        def f(node):
             return ""
         self.assertRaises(TypeError, f, 10)
         self.assertEqual(f(node=2), "")
 
-        @force_requires("node")
-        def f(node):
+        @kwonly("node")
+        def f(node=1):
             return 1
         self.assertRaises(TypeError, f, 10)
         self.assertEqual(f(node=1), 1)
