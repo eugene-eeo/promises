@@ -131,6 +131,6 @@ NUM = (float, complex, int)
 
 class Number(Trait):
     typecheck = lambda self, x: isinstance(x, NUM)
-    if version_info.major == 2:
+    if version_info[0] == 2:
         typecheck = lambda self, x: isinstance(x, NUM + (long,))
 
