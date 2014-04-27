@@ -37,10 +37,10 @@ class MetaBuilder(object):
 
         return cls
 
-_ITEMS = MetaBuilder(methods=["__setitem__","__delitem__","__getitem__"])
+ITEMS = MetaBuilder(methods=["__iter__","__setitem__","__delitem__",
+                             "__getitem__","__contains__"])
 
 @includes(_ITEMS)
-@includes(MetaBuilder(methods=["__iter__"]))
 class List(Trait):
     """
     A generic ``List`` type that needs the
@@ -48,11 +48,12 @@ class List(Trait):
     attributes:
 
      - ``__delitem__``, ``__setitem__``, and ``__getitem__``
-     - ``remove`` and ``sort``
+     - ``insert`` and ``index``
+     - ``__contains__``
      - ``__iter__``
     """
-    remove = Method("remove")
-    sort   = Method("sort")
+    insert = Method("insert")
+    index  = Method("index")
 
 @includes(List)
 class Stack(Trait):
@@ -67,7 +68,6 @@ class Stack(Trait):
     push = Method("push")
     pop  = Method("pop")
 
-@includes(MetaBuilder(methods=["__iter__","__contains__"]))
 @includes(_ITEMS)
 class Dictionary(Trait):
     """
