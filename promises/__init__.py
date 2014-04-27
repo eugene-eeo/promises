@@ -90,7 +90,7 @@ def returns(*types):
             result = f(*args, **kwargs)
             if isinstance(result, tuple):
                 length = len(result)
-                for item in [isinstance(i, tuple) for i in needed]:
+                for item in [i for i in needed if isinstance(i, tuple)]:
                     if length != len(item):
                         raise TypeError
 

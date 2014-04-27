@@ -97,6 +97,13 @@ class PromisesTestCase(TestCase):
         self.assertRaises(TypeError, f, "")
         self.assertEqual(1, f(1))
 
+        @returns((int, int))
+        def f(x):
+            return x, x-1
+
+        self.assertRaises(TypeError, f, 1.0)
+        self.assertEqual((1, 0), f(1))
+
         @returns((int, bool))
         def f(x):
             return 1, False
