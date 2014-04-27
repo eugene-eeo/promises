@@ -23,6 +23,7 @@
     in the ``Trait`` class.
 """
 
+from sys import version_info
 from promises.trait.impl import *
 
 __all__ = ["List","Stack","Dictionary","Collection"]
@@ -125,4 +126,11 @@ class Each(object):
         data = {"__instancecheck__": valid}
         new = type("generic-each", (Trait,), data)
         return new
+
+NUM = (float, complex, int)
+
+class Number(Trait):
+    typecheck = lambda self, x: isinstance(x, NUM)
+    if version_info.major == 2:
+        typecheck = lambda self, x: isinstance(x, NUM + (long,))
 

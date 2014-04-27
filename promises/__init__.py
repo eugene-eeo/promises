@@ -77,22 +77,28 @@ def requires(*needed):
 
 def returns(*types):
     def function(f):
-        length = len(types)
+        tmp = list(types)
+        for item in types:
+            if isinstance(item, type) and issubclass(item, Trait):
+                item = item()
+            tmp.append(item)
+
+        needed = tuple(tmp)
 
         @wraps(f)
         def wrapper(*args, **kwargs):
             result = f(*args, **kwargs)
-            if hasattr(result, '__iter__'):
-                counter = 0
-                for res, required in zip(result, types):
-                    if not isinstance(res, required):
+            if isinstance(result, tuple):
+                length = len(result)
+                for item in [isinstance(i, tuple) for i in needed]:
+                    if length != len(item):
                         raise TypeError
-                    counter += 1
-                if counter != length:
-                    raise TypeError
-                return result
 
-            if not isinstance(result, types):
+                    for index, t in enumerate(item):
+                        if not isinstance(result[index], t):
+                            raise TypeError
+
+            elif not isinstance(result, needed):
                 raise TypeError
             return result
 

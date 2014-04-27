@@ -61,7 +61,7 @@ class Trait(object):
             if not item.startswith('__'):
                 required = getattr(self, item)
                 if isinstance(required, Trait):
-                    required = lambda x: hasattr(x, item) and required.validate(x)
+                    required = lambda x: hasattr(x, item) and required.validate(getattr(x, item))
 
                 if not required(obj):
                     return False

@@ -86,13 +86,13 @@ example:
 
 .. code-block:: python
 
-    @returns((int, float))
+    @returns(int, float)
     def div(x,y):
         return x/y
 
-Note the extra braces, because ``promises``
-will attempt to unpack the variables and
-then match the types.
+Starting from 0.6.18 ``returns``
+will start to support the usage
+of traits.
 
 ~~~~~~~
 rejects
