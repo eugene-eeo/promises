@@ -112,6 +112,7 @@ class Each(object):
         ...     for item in docs:
         ...         item.save()
         ...
+        >>> save_all(docs)
 
     :param typename: Any number of types or
         traits that you want to be able to
