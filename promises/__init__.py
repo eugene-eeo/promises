@@ -94,8 +94,8 @@ def returns(*types):
                     if length != len(item):
                         raise TypeError
 
-                    for index, t in enumerate(item):
-                        if not isinstance(result[index], t):
+                    for need, got in zip(item, result):
+                        if not isinstance(got, need):
                             raise TypeError
 
             elif not isinstance(result, needed):
