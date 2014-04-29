@@ -26,7 +26,7 @@
 from sys import version_info
 from promises.trait.impl import *
 
-__all__ = ["List","Stack","Dictionary","Collection"]
+__all__ = ["List","Stack","Dictionary","Collection","Each","Sequence"]
 
 class MetaBuilder(object):
     def __new__(self, methods=[], attrs=[]):
@@ -159,6 +159,9 @@ class Sequence(Trait):
     def __new__(self, *types):
         length = len(types)
         def function(ins, datum):
+            if not (type(datum) is tuple):
+                return False
+
             counter = 0
             for index, item in enumerate(zip(types, datum)):
                 needed, got = item
