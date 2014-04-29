@@ -88,17 +88,7 @@ def returns(*types):
         @wraps(f)
         def wrapper(*args, **kwargs):
             result = f(*args, **kwargs)
-            if isinstance(result, tuple):
-                length = len(result)
-                for item in [i for i in needed if isinstance(i, tuple)]:
-                    if length != len(item):
-                        raise TypeError
-
-                    for need, got in zip(item, result):
-                        if not isinstance(got, need):
-                            raise TypeError
-
-            elif not isinstance(result, needed):
+            if not isinstance(result, needed):
                 raise TypeError
             return result
 

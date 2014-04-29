@@ -97,14 +97,14 @@ class PromisesTestCase(TestCase):
         self.assertRaises(TypeError, f, "")
         self.assertEqual(1, f(1))
 
-        @returns((int, int))
+        @returns(spec.Each(int))
         def f(x):
             return x, x-1
 
         self.assertRaises(TypeError, f, 1.0)
         self.assertEqual((1, 0), f(1))
 
-        @returns((int, bool))
+        @returns(spec.Sequence(int, bool))
         def f(x):
             return 1, False
         self.assertEqual(f(10), (1, False))

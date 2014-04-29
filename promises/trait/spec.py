@@ -155,3 +155,18 @@ class Number(Trait):
     if version_info[0] == 2:
         typecheck = lambda self, x: isinstance(x, NUM + (long,))
 
+class Sequence(Trait):
+    def __new__(self, *types):
+        length = len(types)
+        def function(ins, datum):
+            counter = 0
+            for index, item in enumerate(zip(types, datum)):
+                needed, got = item
+                if not isinstance(got, needed):
+                    return False
+                counter += 1
+            return True
+
+        data = {"__instancecheck__": function}
+        return type("generic-sequence", (Trait,), data)
+
