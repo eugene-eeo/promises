@@ -92,7 +92,18 @@ example:
 
 Starting from 0.6.18 ``returns``
 will start to support the usage
-of traits.
+of traits. Note, to support return
+functions that iterate through
+tuples, you can do the following:
+
+.. code-block:: python
+
+    from promises.trait.spec import Sequence
+
+    @returns(Sequence(int, bool))
+    def is_zero(x):
+        x = int(x)
+        return x, x == 0
 
 ~~~~~~~
 rejects
