@@ -225,7 +225,8 @@ example:
     def method(x):
         raise TypeError("Unexpected type.")
 
-    @method.register(Number)
+    @method.register(float)
+    @method.register(int)
     def _(x):
         return x*2
 
@@ -233,7 +234,10 @@ Keep in mind that single-dispatch
 generic functions do come at a cost,
 especially if they are done so at
 runtime, unless you use a JIT like
-PyPy.
+PyPy. Also, they do not work with
+the traits in ``promises`` since
+the functions do not use ``isinstance``
+as a means of type checking.
 
 .. _PEP443: https://www.python.org/dev/peps/pep-0443
 
