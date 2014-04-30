@@ -1,8 +1,29 @@
 from promises import *
 from promises.trait import *
+from promises.dispatch import *
 import promises.trait.spec as spec
 from collections import defaultdict
 from unittest import TestCase, main
+
+class DispatchTestCase(TestCase):
+    def test_singledispatch(self):
+        @singledispatch
+        def f(x):
+            return x
+
+        @f.register(dict)
+        def _(x):
+            return x.get("object")
+
+        @f.register(list)
+        def _(x):
+            return x[0]
+
+        self.assertEqual(f(100), 100)
+        self.assertEqual(f([0]), 0)
+
+        data = {'object':object}
+        self.assertEqual(f(data), data['object'])
 
 class TraitsTestCase(TestCase):
     def test_each(self):
