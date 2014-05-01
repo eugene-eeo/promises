@@ -94,16 +94,13 @@ def singledispatch(f):
     implementation availability).
     """
     code = f.__code__
-    varnames = code.co_varnames[:code.co_argcount]
+    firstarg = code.co_varnames[:code.co_argcount][0]
 
     def wrapper(*args, **kwargs):
         # check if arguments are okay before
         # we do any processing
         res = f(*args, **kwargs)
-        if len(args) < 1:
-            first = kwargs[varnames[0]]
-        else:
-            first = args[0]
+        first = args[0] if len(args) > 0 else kwargs[firstarg]
 
         for typename, delegate in f.meta.registered.items():
             if isinstance(first, typename):
