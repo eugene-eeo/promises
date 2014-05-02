@@ -63,7 +63,7 @@ def generic_register(f):
         return wrapper
     return closure
 
-def singledispatch(f):
+def singledispatch(argname):
     """
     A generic single-dispatch function decorator;
     the decorated function will have the ``meta``
@@ -72,7 +72,7 @@ def singledispatch(f):
     which can be used to register types for
     delegation. For example::
 
-        >>> @singledispatch
+        >>> @singledispatch("x")
         ... def f(x):
         ...     pass
         ...
@@ -93,22 +93,24 @@ def singledispatch(f):
     always be called regardless of
     implementation availability).
     """
-    code = f.__code__
-    firstarg = code.co_varnames[:code.co_argcount][0]
+    def inner(f):
+        code = f.__code__
+        varnames = dict((k, i) for i, k in enumerate(code.co_varnames[:code.co_argcount]))
+        def wrapper(*args, **kwargs):
+            # check if arguments are okay before
+            # we do any processing
+            res = f(*args, **kwargs)
+            index = varnames[argname]
+            first = kwargs[argname] if len(args) <= index else args[index]
 
-    def wrapper(*args, **kwargs):
-        # check if arguments are okay before
-        # we do any processing
-        res = f(*args, **kwargs)
-        first = args[0] if len(args) > 0 else kwargs[firstarg]
+            for typename, delegate in f.meta.registered.items():
+                if isinstance(first, typename):
+                    return delegate(*args, **kwargs)
+            return res
 
-        for typename, delegate in f.meta.registered.items():
-            if isinstance(first, typename):
-                return delegate(*args, **kwargs)
-        return res
-
-    f.meta = type("generic-meta", (object,), {})
-    f.meta.registered = defaultdict(lambda: f)
-    wrapper.register = generic_register(f)
-    return wrapper
+        f.meta = type("generic-meta", (object,), {})
+        f.meta.registered = defaultdict(lambda: f)
+        wrapper.register = generic_register(f)
+        return wrapper
+    return inner
 

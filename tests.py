@@ -7,7 +7,7 @@ from unittest import TestCase, main
 
 class DispatchTestCase(TestCase):
     def test_singledispatch(self):
-        @singledispatch
+        @singledispatch("x")
         def f(x):
             return x
 
