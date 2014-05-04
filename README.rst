@@ -223,7 +223,7 @@ example:
 
     @singledispatch
     def method(x):
-        raise TypeError("Unexpected type.")
+        pass
 
     @method.register(float)
     @method.register(int)
