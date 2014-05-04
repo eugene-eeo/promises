@@ -241,6 +241,27 @@ as a means of type checking.
 
 .. _PEP443: https://www.python.org/dev/peps/pep-0443
 
+If you need traits when dispatching
+functions you can use the following
+pattern:
+
+.. code-block:: python
+
+    from promises.trait.spec import Number
+    from promises.dispatch import singledispatch
+
+    @singledispatch("x")
+    def f(x, y):
+        pass
+
+    @f.register(Number)
+    def _(x, y):
+        return x+y
+
+    @f.register(str)
+    def _(x, y):
+        return str(x) + y
+
 -----------------
 Running the tests
 -----------------
