@@ -262,6 +262,13 @@ pattern:
     def _(x, y):
         return str(x) + y
 
+The semantics are almost the same as
+the standard library dispatch function
+except for the fact that it can dispatch
+according to a given argument instead of
+the first argument, reducing the need
+for arg-swapping helper functions.
+
 -----------------
 Running the tests
 -----------------

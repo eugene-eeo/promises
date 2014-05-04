@@ -156,7 +156,31 @@ class Number(Trait):
         typecheck = lambda self, x: isinstance(x, NUM + (long,))
 
 class Sequence(Trait):
+    """
+    A sequence is a trait that validates
+    a datum based on the types of items passed
+    in, and assumes that the datum must be of
+    type ``tuple``. For example:
+
+        >>> from promises.trait.spec import Sequence
+        >>> from promises import accepts
+        >>> @accepts(Sequence(int, int))
+        ... def add_tuple(x):
+        ...     return x[0]+x[1]
+        ...
+        >>> add_tuple((1,2))
+        3
+
+    Note that the constructor method
+    doesn't return a ``Sequence``
+    trait but returns a generic trait.
+
+    :param types: An arbitrary number of
+        types that can be passed to the
+        constructor method.
+    """
     def __new__(self, *types):
+        types = tuple((i() if isinstance(i, type) and issubclass(i, Trait) else i) for i in types)
         length = len(types)
         def function(ins, datum):
             if not (type(datum) is tuple):

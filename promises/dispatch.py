@@ -95,21 +95,23 @@ def singledispatch(argname):
     """
     def inner(f):
         code = f.__code__
-        varnames = dict((k, i) for i, k in enumerate(code.co_varnames[:code.co_argcount]))
+        index = code.co_varnames[:code.co_argcount].index(argname)
+
+        f.meta = type("generic-meta", (object,), {})
+        registered = defaultdict(lambda: f)
+        f.meta.registered = registered
+
         def wrapper(*args, **kwargs):
             # check if arguments are okay before
             # we do any processing
             res = f(*args, **kwargs)
-            index = varnames[argname]
             first = kwargs[argname] if len(args) <= index else args[index]
 
-            for typename, delegate in f.meta.registered.items():
+            for typename, delegate in registered.items():
                 if isinstance(first, typename):
                     return delegate(*args, **kwargs)
             return res
 
-        f.meta = type("generic-meta", (object,), {})
-        f.meta.registered = defaultdict(lambda: f)
         wrapper.register = generic_register(f)
         return wrapper
     return inner
