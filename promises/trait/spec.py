@@ -2,12 +2,12 @@
     promises.trait.impl
     ~~~~~~~~~~~~~~~~~~~
     A metaprogramming-based generic-type definition
-    module for the ``@implements`` function. Example
+    module for the ``@accepts`` function. Example
     usage::
 
         >>> from promises.trait.impl import List
         >>> @returns(list)
-        ... @implements(List, List)
+        ... @accepts(List, List)
         ... def join(x, y):
         ...     temp = []
         ...     for iterable in (x,y):
@@ -97,11 +97,9 @@ class Collection(Trait):
 
 class Each(object):
     """
-    A metaclass which produces a new generic
-    type of class ``Trait`` which validates
-    iterables. In particular, every object
-    within the iterable must conform to the
-    type specified. For example, to implement
+    An iterable validator. In particular, every
+    object within the iterable must conform to
+    the type specified. For example, to implement
     a function that saves all MongoEngine
     documents::
 
@@ -113,6 +111,12 @@ class Each(object):
         ...         item.save()
         ...
         >>> save_all(docs)
+
+    However this trait only validates tuples
+    because they are commonly passed around
+    in functions and as return types, and
+    also because some iterables are consume
+    only and not held in memory.
 
     :param typenames: Any number of types or
         traits that you want to be able to
@@ -171,10 +175,6 @@ class Sequence(Trait):
         ...
         >>> add_tuple((1,2))
         3
-
-    Note that the constructor method
-    doesn't return a ``Sequence``
-    trait but returns a generic trait.
 
     :param types: An arbitrary number of
         types that can be passed to the
