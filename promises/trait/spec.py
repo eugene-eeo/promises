@@ -114,19 +114,20 @@ class Each(object):
         ...
         >>> save_all(docs)
 
-    :param typename: Any number of types or
+    :param typenames: Any number of types or
         traits that you want to be able to
         implement.
     """
-    def __new__(self, *typename):
-        def valid(ins, x):
-            for item in x:
-                if not isinstance(item, typename):
-                    return False
-            return True
-        data = {"__instancecheck__": valid}
-        new = type("generic-each", (Trait,), data)
-        return new
+    def __init__(self, *typenames):
+        self.types = tuple((i() if isinstance(i, type) and issubclass(i, Trait) else i) for i in typenames)
+
+    def __instancecheck__(self, obj):
+        allowed = self.types
+        for item in obj:
+            if not isinstance(item, allowed):
+                return False
+        return True
+
 
 NUM = (float, complex, int)
 
@@ -179,21 +180,16 @@ class Sequence(Trait):
         types that can be passed to the
         constructor method.
     """
-    def __new__(self, *types):
-        types = tuple((i() if isinstance(i, type) and issubclass(i, Trait) else i) for i in types)
-        length = len(types)
-        def function(ins, datum):
-            if not (type(datum) is tuple):
+    def __init__(self, *types):
+        self.types = tuple((i() if isinstance(i, type) and issubclass(i, Trait) else i) for i in types)
+        self.length = len(types)
+
+    def __instancecheck__(self, obj):
+        if not isinstance(obj, tuple) or len(obj) != self.length:
+            return False
+
+        for needed, got in zip(self.types, obj):
+            if not isinstance(got, needed):
                 return False
-
-            counter = 0
-            for index, item in enumerate(zip(types, datum)):
-                needed, got = item
-                if not isinstance(got, needed):
-                    return False
-                counter += 1
-            return True
-
-        data = {"__instancecheck__": function}
-        return type("generic-sequence", (Trait,), data)
+        return True
 

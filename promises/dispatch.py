@@ -29,7 +29,6 @@
 """
 
 from functools import wraps
-from collections import defaultdict
 from promises.trait.impl import Trait
 
 __all__ = ["singledispatch"]
@@ -89,28 +88,24 @@ def singledispatch(argname):
     argument are not found, the function
     will not raise a ``NotImplementedError``,
     instead it will return the result of
-    the decorated function (which will
-    always be called regardless of
-    implementation availability).
+    the decorated function, which will
+    only be called when there are no
+    available implementations.
     """
     def inner(f):
         code = f.__code__
         index = code.co_varnames[:code.co_argcount].index(argname)
 
         f.meta = type("generic-meta", (object,), {})
-        registered = defaultdict(lambda: f)
+        registered = {}
         f.meta.registered = registered
 
         def wrapper(*args, **kwargs):
-            # check if arguments are okay before
-            # we do any processing
-            res = f(*args, **kwargs)
             first = kwargs[argname] if len(args) <= index else args[index]
-
             for typename, delegate in registered.items():
                 if isinstance(first, typename):
                     return delegate(*args, **kwargs)
-            return res
+            return f(*args, **kwargs)
 
         wrapper.register = generic_register(f)
         return wrapper
