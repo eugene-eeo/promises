@@ -100,6 +100,7 @@ def singledispatch(argname):
         registered = {}
         f.meta.registered = registered
 
+        @wraps(f)
         def wrapper(*args, **kwargs):
             first = kwargs[argname] if len(args) <= index else args[index]
             for typename, delegate in registered.items():
