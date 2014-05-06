@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name="Promises",
-    version="0.7.2",
+    version="0.7.3",
     description="Python Type Checking",
     author="Eugene Eeo",
     author_email="packwolf58@gmail.com",
