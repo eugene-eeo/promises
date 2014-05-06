@@ -26,7 +26,7 @@ from itertools import chain
 from collections import defaultdict
 
 from promises.trait import Trait
-from promises.utils import transform_dict, transform_iterable
+from promises.utils import *
 
 obj_getter = lambda: object
 __all__ = ['requires','accepts','returns','rejects',
@@ -57,14 +57,9 @@ def accepts(*args, **kw):
     captured arguments.
     """
     def function(f):
-        code = f.__code__
-        varnames = code.co_varnames[:code.co_argcount]
-
-        tmp = {}
-        tmp.update(kw)
-        tmp.update(dict(zip(varnames, args)))
-
-        types = transform_dict(tmp)
+        varnames = get_var_array(f)
+        kw.update(dict(zip(varnames, args)))
+        types = transform_dict(kw)
 
         @wraps(f)
         def wrapper(*args, **kwargs):
@@ -130,17 +125,17 @@ def kwonly(*needed):
     decorator.
     """
     def function(f):
-        code = f.__code__
-        varnames = code.co_varnames[:code.co_argcount]
+        varnames = get_var_array(f)
 
         @wraps(f)
         def wrapper(*args, **kwargs):
-            temp = list(kwargs.keys())
-            temp.extend(map(lambda x: x[0], zip(varnames, args)))
+            captured = list(kwargs.keys())
+            captured.extend(map(lambda x: x[0], zip(varnames, args)))
 
             for item in needed:
-                if item in temp and item not in kwargs:
-                    raise TypeError("argument {0} is not passed as a keyword argument".format(item))
+                if item in captured and item not in kwargs:
+                    message = "argument {0} is not passed as a keyword argument".format(item)
+                    raise TypeError(message)
             return f(*args, **kwargs)
         return wrapper
     return function
@@ -230,14 +225,9 @@ def rejects(*args, **kw):
     objects correspond to the required types.
     """
     def function(f):
-        code = f.__code__
-        varnames = code.co_varnames[:code.co_argcount]
-
-        tmp = {}
-        tmp.update(kw)
-        tmp.update(dict(zip(varnames, args)))
-
-        types = transform_dict(tmp)
+        varnames = get_var_array(f)
+        kw.update(dict(zip(varnames, args)))
+        types = transform_dict(kw)
 
         @wraps(f)
         def wrapper(*args, **kwargs):
