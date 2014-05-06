@@ -187,9 +187,9 @@ def returns(*types):
         ... def div(x,y):
         ...     return x/y
         ...
-        >>> div(2,1)
+        >>> div(2, 1)
         2
-        >>> div(2,1.0)
+        >>> div(2, 1.0)
         2.0
 
     Since ``returns`` supports trait-checking,
