@@ -24,7 +24,9 @@
 from functools import wraps
 from itertools import chain
 from collections import defaultdict
+
 from promises.trait import Trait
+from promises.utils import transform_dict, transform_iterable
 
 obj_getter = lambda: object
 __all__ = ['requires','accepts','returns','rejects',
@@ -62,11 +64,7 @@ def accepts(*args, **kw):
         tmp.update(kw)
         tmp.update(dict(zip(varnames, args)))
 
-        types = defaultdict(obj_getter)
-        for key, value in tmp.items():
-            if isinstance(value, type) and issubclass(value, Trait):
-                value = value()
-            types[key] = value
+        types = transform_dict(tmp)
 
         @wraps(f)
         def wrapper(*args, **kwargs):
@@ -106,8 +104,7 @@ def throws(*exceptions):
             except Exception as exc:
                 if not isinstance(exc, exceptions):
                     raise TypeError("{0} is not of exception(s) {1}".format(exc, exceptions))
-                else:
-                    raise
+                raise
         return wrapper
     return function
 
@@ -214,7 +211,7 @@ def returns(*types):
     modules.
     """
     def function(f):
-        needed = tuple((i() if isinstance(i, type) and issubclass(i, Trait) else i) for i in types)
+        needed = transform_iterable(types)
 
         @wraps(f)
         def wrapper(*args, **kwargs):
@@ -240,11 +237,7 @@ def rejects(*args, **kw):
         tmp.update(kw)
         tmp.update(dict(zip(varnames, args)))
 
-        types = defaultdict(obj_getter)
-        for key, value in tmp.items():
-            if isinstance(value, type) and issubclass(value, Trait):
-                value = value()
-            types[key] = value
+        types = transform_dict(tmp)
 
         @wraps(f)
         def wrapper(*args, **kwargs):
