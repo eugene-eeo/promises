@@ -269,6 +269,23 @@ according to a given argument instead of
 the first argument, reducing the need
 for arg-swapping helper functions.
 
+------------------------
+Type Converted Functions
+------------------------
+
+With ``promises`` it is possible to make
+functions which automatically convert
+arguments to a certain type. For example,
+consider the following example:
+
+.. code-block:: python
+
+    from promises.convert import watch
+
+    @watch(float, float)
+    def div(x, y):
+        return x/y
+
 -----------------
 Running the tests
 -----------------
