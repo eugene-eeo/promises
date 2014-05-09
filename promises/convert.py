@@ -18,11 +18,13 @@ def watch(*a, **kw):
                     context_args = False
                     continue
                 if key in types:
-                    value = types[key](value)
-                    if context_args:
-                        args[index] = value
-                        continue
-                    kwargs[key] = value
+                    needed = types[key]
+                    if not isinstance(value, needed):
+                        value = needed(value)
+                        if context_args:
+                            args[index] = value
+                            continue
+                        kwargs[key] = value
             return f(*args, **kwargs)
         return wrapper
     return inner
