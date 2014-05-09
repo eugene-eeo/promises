@@ -1,9 +1,34 @@
 from promises import *
 from promises.trait import *
 from promises.dispatch import *
+from promises.convert import watch
+
 import promises.trait.spec as spec
+
 from collections import defaultdict
 from unittest import TestCase, main
+
+class ConvertTestCase(TestCase):
+    def test_watch_multiple(self):
+        @watch(dict, object, int)
+        def increment(d, key, inc=1):
+            if key not in d:
+                d[key] = 0
+            d[key] += inc
+            return d[key]
+
+        data = {}
+        increment(data, "key")
+        self.assertEqual(data["key"], 1)
+        increment(data, "key")
+        self.assertEqual(data["key"], 2)
+
+    def test_watch(self):
+        @watch(float)
+        def f(x):
+            return x+1
+        self.assertEqual(f(1), 2.0)
+        self.assertEqual(f(1.5), 2.5)
 
 class DispatchTestCase(TestCase):
     def test_singledispatch(self):
