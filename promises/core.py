@@ -1,36 +1,41 @@
 from functools import wraps
-from inspect import getargs
-from itertools import chain
 
 
-EXPECT_ARG = 'Expected argument [%s] to be %r'
+EXPECT_ARG = 'Expected argument %r to be %r'
 EXPECT_RET = 'Expected return value to be %r'
 
 
-def validate_posargs(sig, args, types):
-    for name, val, _type in zip(sig, args, types):
-        expected = types[name]
-        if not isinstance(val, expected):
-            raise TypeError(EXPECT_ARG % (name, expected))
+def signature(f):
+    if not hasattr(f, '__orgargs__'):
+        code = f.__code__
+        f.__orgargs__ = code.co_varnames[:code.co_argcount]
+    return f.__orgargs__
+
+
+def validate_posargs(args, types):
+    for val, _type in zip(args, types):
+        if not isinstance(val, _type):
+            raise TypeError(EXPECT_ARG % (val, _type))
 
 
 def validate_kwdargs(args, types):
-    for argname in args:
-        if argname not in types:
+    for arg in args:
+        if arg not in types:
             continue
-        expected = types[argname]
-        if not isinstance(args[argname], expected):
-            raise TypeError(EXPECT_ARG % (argname, expected))
+        value = args[arg]
+        type_ = types[arg]
+        if not isinstance(value, type_):
+            raise TypeError(EXPECT_ARG % (value, type_))
 
 
 def accepts(*types, **index):
     def decorator(f):
-        sig = getargs(f.__code__).args
+        sig = signature(f)
         index.update(zip(sig, types))
 
         @wraps(f)
         def function(*pos, **kwd):
-            validate_posargs(sig, pos, index)
+            validate_posargs(pos, types)
             validate_kwdargs(kwd, index)
             return f(*pos, **kwd)
         return function
@@ -39,6 +44,8 @@ def accepts(*types, **index):
 
 def returns(*types):
     def decorator(f):
+        signature(f)
+
         @wraps(f)
         def function(*pos, **kwd):
             rv = f(*pos, **kwd)

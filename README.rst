@@ -1,4 +1,4 @@
-promises
+Promises
 ========
 
 .. image:: https://travis-ci.org/eugene-eeo/promises.png?branch=master

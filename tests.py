@@ -35,3 +35,19 @@ def test_returns():
 
     with raises(TypeError):
         f('')
+
+
+def test_accepts_decorated():
+    @accepts(AnyOf[int,float])
+    @returns(str)
+    def f(x):
+        return str(x)
+
+    assert f(100) == '100'
+    assert f(1.0) == '1.0'
+
+    with raises(TypeError):
+        f('')
+
+    with raises(TypeError):
+        f(x='')
