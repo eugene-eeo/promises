@@ -3,6 +3,9 @@ from promises.utils import signature, validate_kwdargs, \
         validate_posargs, generate_signature
 
 
+EXPECT_RET = 'Expected return value to be %r'
+
+
 def accepts(*types, **index):
     def decorator(f):
         sig = signature(f)

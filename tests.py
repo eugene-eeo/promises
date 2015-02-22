@@ -15,15 +15,14 @@ def test_every():
 
 @accepts(AnyOf[int,float], int)
 @returns(str)
-def f(x, index):
-    return str(x)[index:]
+def f(x, index, container=str):
+    return container(x)[index:]
 
 
 def test_signature():
     g = returns(str)(f)
-    assert f.__orgargs__ == ('x', 'index')
-    assert g.__orgargs__ == ('x', 'index')
-
+    assert f.__orgargs__ == ('x', 'index', 'container')
+    assert g.__orgargs__ == f.__orgargs__
 
 
 def test_accepts():
@@ -40,3 +39,8 @@ def test_accepts():
     for item in callbacks:
         with raises(TypeError):
             item()
+
+
+def test_returns():
+    with raises(TypeError):
+        f(1.0, 1, lambda x: [x])

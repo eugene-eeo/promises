@@ -1,5 +1,4 @@
 EXPECT_ARG = 'Expected argument %r to be %r'
-EXPECT_RET = 'Expected return value to be %r'
 
 
 def generate_signature(f):
