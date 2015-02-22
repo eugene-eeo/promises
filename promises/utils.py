@@ -1,7 +1,15 @@
-def signature(f):
+EXPECT_ARG = 'Expected argument %r to be %r'
+EXPECT_RET = 'Expected return value to be %r'
+
+
+def generate_signature(f):
     if not hasattr(f, '__orgargs__'):
         code = f.__code__
         f.__orgargs__ = code.co_varnames[:code.co_argcount]
+
+
+def signature(f):
+    generate_signature(f)
     return f.__orgargs__
 
 

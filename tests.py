@@ -1,5 +1,5 @@
-from collections import Sequence, Mapping
 from pytest import raises
+from collections import Sequence, Mapping
 from promises import accepts, returns, Every, AnyOf
 
 
@@ -13,41 +13,30 @@ def test_every():
     assert isinstance([], Every[Sequence,list])
 
 
+@accepts(AnyOf[int,float], int)
+@returns(str)
+def f(x, index):
+    return str(x)[index:]
+
+
+def test_signature():
+    g = returns(str)(f)
+    assert f.__orgargs__ == ('x', 'index')
+    assert g.__orgargs__ == ('x', 'index')
+
+
+
 def test_accepts():
-    @accepts(int, y=int, z=str)
-    def function(x, y, z=''):
-        pass
+    assert f(100, 0) == '100'
+    assert f(1.0, 1) == '.0'
 
-    function(1, 2, '')
-    function(1, y=2, z='')
+    callbacks = [
+        lambda: f(2, 1.0),
+        lambda: f('', index=1),
+        lambda: f(1, index=2.0),
+        lambda: f(x='', index=''),
+    ]
 
-    with raises(TypeError):
-        function(1, y='', z='')
-
-
-def test_returns():
-    @returns(AnyOf[float,int])
-    def f(x):
-        return x + 1
-
-    assert f(1) == 2
-    assert f(1.0) == 2.0
-
-    with raises(TypeError):
-        f('')
-
-
-def test_accepts_decorated():
-    @accepts(AnyOf[int,float])
-    @returns(str)
-    def f(x):
-        return str(x)
-
-    assert f(100) == '100'
-    assert f(1.0) == '1.0'
-
-    with raises(TypeError):
-        f('')
-
-    with raises(TypeError):
-        f(x='')
+    for item in callbacks:
+        with raises(TypeError):
+            item()

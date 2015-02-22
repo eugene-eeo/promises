@@ -1,9 +1,6 @@
 from functools import wraps
-from promises.utils import signature, validate_kwdargs, validate_posargs
-
-
-EXPECT_ARG = 'Expected argument %r to be %r'
-EXPECT_RET = 'Expected return value to be %r'
+from promises.utils import signature, validate_kwdargs, \
+        validate_posargs, generate_signature
 
 
 def accepts(*types, **index):
@@ -22,7 +19,7 @@ def accepts(*types, **index):
 
 def returns(*types):
     def decorator(f):
-        signature(f)
+        generate_signature(f)
 
         @wraps(f)
         def function(*pos, **kwd):
