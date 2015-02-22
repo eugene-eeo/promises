@@ -20,3 +20,18 @@ def test_accepts():
 
     function(1, 2, '')
     function(1, y=2, z='')
+
+    with raises(TypeError):
+        function(1, y='', z='')
+
+
+def test_returns():
+    @returns(AnyOf[float,int])
+    def f(x):
+        return x + 1
+
+    assert f(1) == 2
+    assert f(1.0) == 2.0
+
+    with raises(TypeError):
+        f('')

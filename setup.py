@@ -8,4 +8,3 @@ setup(
     author_email="packwolf58@gmail.com",
     packages=["promises"],
     )
-
