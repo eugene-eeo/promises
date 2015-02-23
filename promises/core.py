@@ -1,6 +1,6 @@
 from functools import wraps
-from promises.utils import signature, validate_kwdargs, \
-        validate_posargs, generate_signature
+from promises.utils import freeze_signature, signature,\
+     validate_kwdargs, validate_posargs
 
 
 EXPECT_RET = 'Expected return value to be %r'
@@ -22,9 +22,7 @@ def accepts(*types, **index):
 
 def returns(*types):
     def decorator(f):
-        generate_signature(f)
-
-        @wraps(f)
+        @wraps(freeze_signature(f))
         def function(*pos, **kwd):
             rv = f(*pos, **kwd)
             if not isinstance(rv, types):
